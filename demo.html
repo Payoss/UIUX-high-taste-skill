@@ -3,982 +3,1115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UIUX High Taste — Skill Showcase</title>
-<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;700&family=Satoshi:wght@400;500;700;900&display=swap" rel="stylesheet">
+<title>UIUX High Taste — Visual Showcase</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;700&family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:wght@400;700&family=Archivo+Black&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --canvas: #050508;
-    --surface: #0a0a0f;
-    --surface-elevated: #111118;
-    --border-whisper: rgba(255,255,255,0.06);
-    --border-active: rgba(255,255,255,0.12);
-    --text-primary: #f0f0f5;
-    --text-secondary: #71717a;
-    --text-muted: #52525b;
-    --accent-emerald: #10b981;
-    --accent-rose: #e11d48;
-    --accent-blue: #3b82f6;
-    --accent-amber: #f59e0b;
-    --radius-lg: 1.5rem;
-    --radius-xl: 2rem;
-    --font-display: 'Cabinet Grotesk', sans-serif;
-    --font-body: 'Satoshi', sans-serif;
-    --font-serif: 'Instrument Serif', serif;
-    --font-mono: 'Geist Mono', monospace;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--canvas);
-    color: var(--text-primary);
-    font-family: var(--font-body);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
-
-  /* ═══ GRAIN OVERLAY — taste-skill: break digital flatness ═══ */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.025;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  /* ═══ SCROLL BEHAVIOR ═══ */
-  html { scroll-behavior: smooth; }
-
-  /* ═══ NAV — minimalist-skill: ultra-clean, editorial ═══ */
-  nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 100;
-    padding: 1.25rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    backdrop-filter: blur(20px) saturate(180%);
-    background: rgba(5,5,8,0.7);
-    border-bottom: 1px solid var(--border-whisper);
-  }
-
-  nav .logo {
-    font-family: var(--font-display);
-    font-weight: 900;
-    font-size: 1.125rem;
-    letter-spacing: -0.03em;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  nav .logo .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent-emerald);
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  nav .nav-links {
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-  }
-
-  nav .nav-links a {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  nav .nav-links a:hover { color: var(--text-primary); }
-
-  /* ═══ HERO — soft-skill: $150k agency level ═══ */
-  .hero {
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 8rem 4rem 6rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Ambient mesh gradient — taste-skill: Ethereal Glass archetype */
-  .hero::before {
-    content: '';
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%);
-    top: 20%;
-    right: -10%;
-    filter: blur(80px);
-    animation: float 8s ease-in-out infinite;
-  }
-
-  .hero::after {
-    content: '';
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%);
-    bottom: 10%;
-    left: -5%;
-    filter: blur(60px);
-    animation: float 10s ease-in-out infinite reverse;
-  }
-
-  .hero-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--accent-emerald);
-    margin-bottom: 2rem;
-    opacity: 0;
-    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-  }
-
-  .hero h1 {
-    font-family: var(--font-display);
-    font-size: clamp(3rem, 8vw, 6.5rem);
-    font-weight: 900;
-    line-height: 0.92;
-    letter-spacing: -0.04em;
-    max-width: 900px;
-    opacity: 0;
-    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
-  }
-
-  .hero h1 .serif-accent {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-weight: 400;
-    color: var(--accent-emerald);
-  }
-
-  .hero-subtitle {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-    max-width: 480px;
-    line-height: 1.65;
-    margin-top: 2.5rem;
-    opacity: 0;
-    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
-  }
-
-  .hero-meta {
-    display: flex;
-    gap: 3rem;
-    margin-top: 4rem;
-    opacity: 0;
-    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
-  }
-
-  .hero-meta .stat {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .hero-meta .stat-value {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 900;
-    letter-spacing: -0.03em;
-  }
-
-  .hero-meta .stat-label {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--text-muted);
-  }
-
-  /* ═══ SECTION HEADERS ═══ */
-  section {
-    padding: 6rem 4rem;
-    position: relative;
-  }
-
-  .section-label {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border-whisper);
-  }
-
-  .section-title {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1.05;
-    margin-bottom: 1rem;
-  }
-
-  .section-desc {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    max-width: 560px;
-    line-height: 1.6;
-    margin-bottom: 3rem;
-  }
-
-  /* ═══ SKILL CARDS — soft-skill: Double-Bezel architecture ═══ */
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  /* The outer shell — soft-skill: "machined hardware" feel */
-  .skill-card {
-    background: var(--surface);
-    border: 1px solid var(--border-whisper);
-    border-radius: var(--radius-xl);
-    padding: 2px;
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  .skill-card:nth-child(1) { animation-delay: 0.1s; }
-  .skill-card:nth-child(2) { animation-delay: 0.2s; }
-  .skill-card:nth-child(3) { animation-delay: 0.3s; }
-  .skill-card:nth-child(4) { animation-delay: 0.4s; }
-  .skill-card:nth-child(5) { animation-delay: 0.5s; }
-  .skill-card:nth-child(6) { animation-delay: 0.6s; }
-  .skill-card:nth-child(7) { animation-delay: 0.7s; }
-
-  .skill-card:hover {
-    border-color: var(--border-active);
-    transform: translateY(-2px);
-    box-shadow: 0 20px 60px -15px rgba(0,0,0,0.5);
-  }
-
-  /* Inner core — soft-skill: distinct background + inner highlight */
-  .skill-card-inner {
-    background: var(--surface-elevated);
-    border-radius: calc(var(--radius-xl) - 2px);
-    padding: 2rem;
-    min-height: 280px;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
-    box-shadow: inset 0 1px 1px rgba(255,255,255,0.04);
-  }
-
-  .skill-card-inner::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
-  }
-
-  .card-source {
-    font-family: var(--font-mono);
-    font-size: 0.5625rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    padding: 0.25rem 0.625rem;
-    border-radius: 4px;
-    width: fit-content;
-    margin-bottom: 1.25rem;
-  }
-
-  .source-leon { background: rgba(16,185,129,0.1); color: var(--accent-emerald); }
-  .source-mrgoonie { background: rgba(59,130,246,0.1); color: var(--accent-blue); }
-  .source-anthropic { background: rgba(245,158,11,0.1); color: var(--accent-amber); }
-  .source-community { background: rgba(225,29,72,0.1); color: var(--accent-rose); }
-  .source-custom { background: rgba(168,85,247,0.1); color: #a855f7; }
-
-  .card-title {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.75rem;
-  }
-
-  .card-description {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    flex: 1;
-  }
-
-  .card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.375rem;
-    margin-top: 1.25rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--border-whisper);
-  }
-
-  .tag {
-    font-family: var(--font-mono);
-    font-size: 0.5625rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    background: rgba(255,255,255,0.04);
-    color: var(--text-muted);
-  }
-
-  /* ═══ FEATURED CARD (span 2) ═══ */
-  .skill-card.featured {
-    grid-column: span 2;
-  }
-
-  .skill-card.featured .skill-card-inner {
-    min-height: 320px;
-  }
-
-  /* ═══ TECHNIQUES SECTION — brutalist-skill: Swiss grid + mono ═══ */
-  .techniques-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    max-width: 1400px;
-    margin: 0 auto;
-    border: 1px solid var(--border-whisper);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-
-  .technique-cell {
-    padding: 2.5rem;
-    border-right: 1px solid var(--border-whisper);
-    border-bottom: 1px solid var(--border-whisper);
-    transition: background 0.3s ease;
-  }
-
-  .technique-cell:hover {
-    background: var(--surface);
-  }
-
-  .technique-cell:nth-child(2n) {
-    border-right: none;
-  }
-
-  .technique-cell:nth-last-child(-n+2) {
-    border-bottom: none;
-  }
-
-  .technique-number {
-    font-family: var(--font-display);
-    font-size: 3.5rem;
-    font-weight: 900;
-    letter-spacing: -0.05em;
-    line-height: 1;
-    color: var(--text-muted);
-    opacity: 0.3;
-    margin-bottom: 1rem;
-  }
-
-  .technique-name {
-    font-family: var(--font-display);
-    font-size: 1.125rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    margin-bottom: 0.5rem;
-  }
-
-  .technique-origin {
-    font-family: var(--font-mono);
-    font-size: 0.5625rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent-emerald);
-    margin-bottom: 0.75rem;
-  }
-
-  .technique-desc {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-
-  /* ═══ ROUTING TABLE — minimalist-skill: Notion-like data ═══ */
-  .routing-table {
-    max-width: 1400px;
-    margin: 0 auto;
-    border: 1px solid var(--border-whisper);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-
-  .routing-row {
-    display: grid;
-    grid-template-columns: 200px 1fr 200px;
-    border-bottom: 1px solid var(--border-whisper);
-    transition: background 0.2s ease;
-  }
-
-  .routing-row:last-child { border-bottom: none; }
-
-  .routing-row:hover { background: var(--surface); }
-
-  .routing-row.header {
-    background: var(--surface);
-  }
-
-  .routing-cell {
-    padding: 1rem 1.5rem;
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
-    border-right: 1px solid var(--border-whisper);
-  }
-
-  .routing-cell:last-child { border-right: none; }
-
-  .routing-cell.header-cell {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-  }
-
-  .routing-cell .skill-pill {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    background: rgba(16,185,129,0.1);
-    color: var(--accent-emerald);
-  }
-
-  .routing-cell .type-label {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.9375rem;
-  }
-
-  /* ═══ CTA — taste-skill: restrained, no neon glows ═══ */
-  .cta-section {
-    text-align: center;
-    padding: 8rem 4rem;
-  }
-
-  .cta-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-family: var(--font-body);
-    font-size: 0.9375rem;
-    font-weight: 500;
-    padding: 1rem 2rem;
-    border-radius: 100px;
-    background: var(--text-primary);
-    color: var(--canvas);
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .cta-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 12px 40px -8px rgba(240,240,245,0.2);
-  }
-
-  .cta-button:active {
-    transform: translateY(0) scale(0.98);
-  }
-
-  .cta-button .arrow {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.1);
-    font-size: 0.8125rem;
-  }
-
-  /* ═══ FOOTER — minimalist-skill: editorial clean ═══ */
-  footer {
-    padding: 3rem 4rem;
-    border-top: 1px solid var(--border-whisper);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  footer .footer-left {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-  }
-
-  footer .footer-right {
-    display: flex;
-    gap: 2rem;
-  }
-
-  footer .footer-right a {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  footer .footer-right a:hover { color: var(--text-primary); }
-
-  /* ═══ ANIMATIONS — taste-skill: spring physics, staggered cascade ═══ */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(-20px, 20px); }
-  }
-
-  /* ═══ RESPONSIVE — taste-skill: strict mobile collapse ═══ */
-  @media (max-width: 768px) {
-    .hero { padding: 7rem 1.5rem 4rem; }
-    .hero h1 { font-size: 2.5rem; }
-    .hero-meta { flex-direction: column; gap: 1.5rem; }
-    section { padding: 4rem 1.5rem; }
-    .skills-grid { grid-template-columns: 1fr; }
-    .skill-card.featured { grid-column: span 1; }
-    .techniques-grid { grid-template-columns: 1fr; }
-    .technique-cell { border-right: none !important; }
-    .routing-table { overflow-x: auto; }
-    .routing-row { grid-template-columns: 140px 1fr 140px; min-width: 600px; }
-    nav .nav-links { display: none; }
-    footer { flex-direction: column; gap: 1rem; text-align: center; }
-  }
+  /* ═══ RESET ═══ */
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
+  body{-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+  /* ═══ SLIDE SYSTEM ═══ */
+  .slide{
+    min-height:100dvh;
+    scroll-snap-align:start;
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+
+  /* ═══ INFO CARD — "What am I looking at?" ═══ */
+  .info-card{
+    position:absolute;
+    bottom:2.5rem;
+    left:2.5rem;
+    max-width:420px;
+    padding:1.5rem;
+    border-radius:16px;
+    backdrop-filter:blur(24px) saturate(180%);
+    z-index:50;
+    transition:opacity 0.4s ease;
+  }
+  .info-card .info-source{
+    font-family:'Geist Mono',monospace;
+    font-size:0.5625rem;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    margin-bottom:0.5rem;
+    display:inline-block;
+    padding:0.2rem 0.5rem;
+    border-radius:4px;
+  }
+  .info-card h3{
+    font-family:'Cabinet Grotesk',sans-serif;
+    font-size:1.25rem;
+    font-weight:800;
+    letter-spacing:-0.02em;
+    margin-bottom:0.5rem;
+  }
+  .info-card p{
+    font-family:'Satoshi',sans-serif;
+    font-size:0.8125rem;
+    line-height:1.65;
+    opacity:0.85;
+  }
+  .info-card .scroll-hint{
+    font-family:'Geist Mono',monospace;
+    font-size:0.5625rem;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    margin-top:1rem;
+    opacity:0.4;
+  }
+
+  /* ═══ ANIMATIONS ═══ */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.85)}}
+  @keyframes scanline{0%{top:-100%}100%{top:100%}}
+  @keyframes typewriter{from{width:0}to{width:100%}}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+  @keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-5%,-10%)}30%{transform:translate(3%,-15%)}50%{transform:translate(12%,9%)}70%{transform:translate(9%,4%)}90%{transform:translate(-1%,7%)}}
+  @keyframes spotlight{0%{opacity:0;transform:scale(0.95)}100%{opacity:1;transform:scale(1)}}
+  @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  @keyframes rotateIn{from{opacity:0;transform:rotate(-3deg) scale(0.95)}to{opacity:1;transform:rotate(0) scale(1)}}
+  @keyframes slideRight{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+  @keyframes countUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ═══ RESPONSIVE ═══ */
+  @media(max-width:768px){
+    .slide{padding:1.5rem !important}
+    .info-card{bottom:1rem;left:1rem;right:1rem;max-width:none}
+    .bento-grid{grid-template-columns:1fr !important}
+    .split-layout{flex-direction:column !important}
+    .hero-title-taste{font-size:3rem !important}
+    .hero-title-soft{font-size:2.5rem !important}
+    .brutalist-title{font-size:4rem !important}
+    .swiss-grid{grid-template-columns:1fr !important}
+    .routing-demo-grid{grid-template-columns:1fr !important}
+  }
+
+  /* ═══════════════════════════════════════════════
+     SLIDE 0 — INTRO
+     ═══════════════════════════════════════════════ */
+  .slide-intro{
+    background:#050508;
+    color:#f0f0f5;
+    font-family:'Cabinet Grotesk',sans-serif;
+    align-items:center;
+    text-align:center;
+    padding:4rem;
+  }
+  .slide-intro .intro-eyebrow{
+    font-family:'Geist Mono',monospace;
+    font-size:0.625rem;
+    text-transform:uppercase;
+    letter-spacing:0.2em;
+    color:#10b981;
+    margin-bottom:2rem;
+    animation:fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.2s both;
+  }
+  .slide-intro h1{
+    font-size:clamp(2.5rem,7vw,5.5rem);
+    font-weight:900;
+    line-height:0.95;
+    letter-spacing:-0.04em;
+    max-width:800px;
+    animation:fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.4s both;
+  }
+  .slide-intro h1 em{
+    font-family:'Instrument Serif',serif;
+    font-style:italic;
+    font-weight:400;
+    color:#10b981;
+  }
+  .slide-intro .intro-sub{
+    font-family:'Satoshi',sans-serif;
+    font-size:1.125rem;
+    color:#71717a;
+    max-width:500px;
+    margin-top:2rem;
+    line-height:1.6;
+    animation:fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.6s both;
+  }
+  .slide-intro .scroll-down{
+    margin-top:4rem;
+    font-family:'Geist Mono',monospace;
+    font-size:0.625rem;
+    text-transform:uppercase;
+    letter-spacing:0.15em;
+    color:#52525b;
+    animation:fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.8s both;
+  }
+  .slide-intro .scroll-arrow{
+    display:block;
+    margin:0.75rem auto 0;
+    width:1px;
+    height:40px;
+    background:linear-gradient(to bottom,#52525b,transparent);
+    animation:pulse 2s ease-in-out infinite;
+  }
+
+
+  /* ═══════════════════════════════════════════════
+     SLIDE 1 — TASTE-SKILL (Leon)
+     Dark, emerald accent, grain, spring animations
+     ═══════════════════════════════════════════════ */
+  .slide-taste{
+    background:#050508;
+    color:#f0f0f5;
+    padding:4rem;
+  }
+  /* Grain overlay */
+  .slide-taste::after{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0.03;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  /* Ambient orbs */
+  .taste-orb-1{
+    position:absolute;width:500px;height:500px;border-radius:50%;
+    background:radial-gradient(circle,rgba(16,185,129,0.1) 0%,transparent 70%);
+    top:10%;right:-5%;filter:blur(80px);animation:float 8s ease-in-out infinite;
+  }
+  .taste-orb-2{
+    position:absolute;width:350px;height:350px;border-radius:50%;
+    background:radial-gradient(circle,rgba(59,130,246,0.07) 0%,transparent 70%);
+    bottom:15%;left:-3%;filter:blur(60px);animation:float 10s ease-in-out infinite reverse;
+  }
+  .hero-title-taste{
+    font-family:'Cabinet Grotesk',sans-serif;
+    font-size:clamp(3rem,8vw,6rem);font-weight:900;
+    line-height:0.92;letter-spacing:-0.04em;
+    max-width:700px;position:relative;z-index:2;
+  }
+  .taste-cards{
+    display:flex;gap:1rem;margin-top:3rem;position:relative;z-index:2;
+    flex-wrap:wrap;
+  }
+  /* Double-bezel card from soft-skill applied with taste-skill colors */
+  .taste-demo-card{
+    background:#0a0a0f;border:1px solid rgba(255,255,255,0.06);
+    border-radius:1.5rem;padding:2px;flex:1;min-width:200px;
+    transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  .taste-demo-card:hover{border-color:rgba(255,255,255,0.12);transform:translateY(-3px);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)}
+  .taste-demo-card-inner{
+    background:#111118;border-radius:calc(1.5rem - 2px);padding:1.5rem;
+    box-shadow:inset 0 1px 1px rgba(255,255,255,0.04);
+    position:relative;overflow:hidden;
+  }
+  .taste-demo-card-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)}
+  .taste-demo-card .card-num{font-family:'Geist Mono',monospace;font-size:0.5625rem;color:#10b981;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem}
+  .taste-demo-card h4{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:1rem;letter-spacing:-0.01em;margin-bottom:0.5rem}
+  .taste-demo-card p{font-size:0.8125rem;color:#71717a;line-height:1.5}
+  .taste-accent{color:#10b981}
+  .taste-info .info-card{background:rgba(5,5,8,0.85);border:1px solid rgba(255,255,255,0.06);color:#f0f0f5}
+  .taste-info .info-source{background:rgba(16,185,129,0.15);color:#10b981}
+
+  /* ═══════════════════════════════════════════════
+     SLIDE 2 — SOFT-SKILL (Leon)
+     Warm cream, editorial serif, $150k agency
+     ═══════════════════════════════════════════════ */
+  .slide-soft{
+    background:#FDFBF7;
+    color:#1a1a1a;
+    padding:4rem;
+  }
+  .soft-noise{
+    position:absolute;inset:0;pointer-events:none;
+    opacity:0.03;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .hero-title-soft{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(2.5rem,6vw,5rem);font-weight:700;
+    line-height:1.05;letter-spacing:-0.02em;
+    max-width:650px;position:relative;z-index:2;
+  }
+  .hero-title-soft .italic-accent{font-style:italic;color:#8B7355}
+  .soft-subtitle{
+    font-family:'Satoshi',sans-serif;font-size:1rem;
+    color:#8B8680;max-width:420px;line-height:1.7;
+    margin-top:1.5rem;position:relative;z-index:2;
+  }
+  /* Bento with double-bezel */
+  .soft-bento{
+    display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:200px 200px;
+    gap:0.75rem;margin-top:3rem;position:relative;z-index:2;
+    max-width:900px;
+  }
+  .soft-cell{
+    background:#F5F2ED;border:1px solid rgba(0,0,0,0.05);
+    border-radius:1.25rem;padding:2px;
+  }
+  .soft-cell-inner{
+    background:#FDFBF7;border-radius:calc(1.25rem - 2px);
+    padding:1.5rem;height:100%;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.8);
+    display:flex;flex-direction:column;justify-content:flex-end;
+  }
+  .soft-cell.span-2{grid-row:span 2}
+  .soft-cell .cell-label{font-family:'Geist Mono',monospace;font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.1em;color:#B5AFA7;margin-bottom:0.5rem}
+  .soft-cell .cell-value{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;color:#1a1a1a;letter-spacing:-0.02em}
+  .soft-cell .cell-desc{font-family:'Satoshi',sans-serif;font-size:0.75rem;color:#8B8680;margin-top:0.25rem;line-height:1.5}
+  .soft-info .info-card{background:rgba(253,251,247,0.9);border:1px solid rgba(0,0,0,0.06);color:#1a1a1a}
+  .soft-info .info-source{background:rgba(139,115,85,0.12);color:#8B7355}
+  .soft-info p{color:#5a5650}
+
+  /* ═══════════════════════════════════════════════
+     SLIDE 3 — MINIMALIST-SKILL (Leon)
+     Notion/Linear, warm white, bento, 1px borders
+     ═══════════════════════════════════════════════ */
+  .slide-minimal{
+    background:#FFFFFF;
+    color:#2F3437;
+    padding:4rem;
+  }
+  .minimal-header{
+    font-family:'Satoshi',sans-serif;font-weight:700;
+    font-size:clamp(1.75rem,3.5vw,2.5rem);
+    letter-spacing:-0.02em;color:#111111;
+    max-width:500px;line-height:1.15;
+  }
+  .minimal-sub{
+    font-family:'Satoshi',sans-serif;font-size:0.9375rem;
+    color:#787774;line-height:1.65;max-width:400px;margin-top:1rem;
+  }
+  .bento-grid{
+    display:grid;grid-template-columns:1fr 1fr 1fr;
+    gap:0;margin-top:2.5rem;
+    border:1px solid #EAEAEA;border-radius:12px;overflow:hidden;
+    max-width:900px;
+  }
+  .bento-cell{
+    padding:1.75rem;border-right:1px solid #EAEAEA;border-bottom:1px solid #EAEAEA;
+    background:#FFFFFF;transition:background 0.2s;
+  }
+  .bento-cell:hover{background:#F9F9F8}
+  .bento-cell:nth-child(3n){border-right:none}
+  .bento-cell:nth-last-child(-n+3){border-bottom:none}
+  .bento-cell .bento-icon{
+    width:32px;height:32px;border-radius:6px;margin-bottom:1rem;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.875rem;
+  }
+  .bento-icon.pastel-blue{background:#E1F3FE;color:#1F6C9F}
+  .bento-icon.pastel-green{background:#EDF3EC;color:#346538}
+  .bento-icon.pastel-red{background:#FDEBEC;color:#9F2F2D}
+  .bento-icon.pastel-yellow{background:#FBF3DB;color:#956400}
+  .bento-icon.pastel-purple{background:#F0EAFF;color:#6B4FAA}
+  .bento-icon.pastel-orange{background:#FFF0E0;color:#A85C00}
+  .bento-cell h4{font-family:'Satoshi',sans-serif;font-weight:700;font-size:0.875rem;color:#111111;margin-bottom:0.375rem}
+  .bento-cell p{font-family:'Satoshi',sans-serif;font-size:0.75rem;color:#787774;line-height:1.55}
+  .minimal-info .info-card{background:rgba(255,255,255,0.95);border:1px solid #EAEAEA;color:#2F3437}
+  .minimal-info .info-source{background:#EDF3EC;color:#346538}
+  .minimal-info p{color:#787774}
+
+  /* ═══════════════════════════════════════════════
+     SLIDE 4 — BRUTALIST-SKILL (Leon)
+     CRT Terminal mode — dark, monospace, scanlines
+     ═══════════════════════════════════════════════ */
+  .slide-brutalist{
+    background:#0a0a0a;
+    color:#00ff41;
+    font-family:'Space Mono',monospace;
+    padding:4rem;
+  }
+  /* Scanline effect */
+  .scanlines{
+    position:absolute;inset:0;pointer-events:none;z-index:10;
+    background:repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+  }
+  /* Phosphor glow */
+  .slide-brutalist::before{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    box-shadow:inset 0 0 150px rgba(0,255,65,0.03);
+    z-index:5;
+  }
+  .brutalist-title{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(4rem,12vw,10rem);
+    font-weight:900;line-height:0.85;
+    letter-spacing:-0.05em;
+    text-transform:uppercase;
+    color:#e8e8e8;
+    position:relative;z-index:20;
+  }
+  .brutalist-title .red{color:#ff0000}
+  .brutalist-meta{
+    font-family:'Space Mono',monospace;
+    font-size:0.6875rem;letter-spacing:0.08em;
+    text-transform:uppercase;color:#00ff41;
+    margin-top:2rem;position:relative;z-index:20;
+    opacity:0.7;
+  }
+  .swiss-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:0;margin-top:2rem;position:relative;z-index:20;
+    border:1px solid rgba(0,255,65,0.2);max-width:900px;
+  }
+  .swiss-cell{
+    border-right:1px solid rgba(0,255,65,0.15);
+    border-bottom:1px solid rgba(0,255,65,0.15);
+    padding:1.25rem;
+    transition:background 0.15s;
+  }
+  .swiss-cell:hover{background:rgba(0,255,65,0.03)}
+  .swiss-cell:nth-child(4n){border-right:none}
+  .swiss-cell:nth-last-child(-n+4){border-bottom:none}
+  .swiss-cell .cell-id{font-size:0.5rem;color:rgba(0,255,65,0.3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem}
+  .swiss-cell .cell-val{font-family:'Archivo Black',sans-serif;font-size:1.5rem;color:#e8e8e8;letter-spacing:-0.03em}
+  .swiss-cell .cell-unit{font-size:0.5625rem;color:rgba(0,255,65,0.5);margin-top:0.25rem}
+  .cursor-blink{display:inline-block;width:8px;height:1.25em;background:#00ff41;animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:4px}
+  .brutalist-info .info-card{background:rgba(10,10,10,0.92);border:1px solid rgba(0,255,65,0.2);color:#00ff41}
+  .brutalist-info .info-source{background:rgba(255,0,0,0.15);color:#ff0000}
+  .brutalist-info h3{color:#e8e8e8}
+  .brutalist-info p{color:rgba(0,255,65,0.7)}
+
+  /* ═══════════════════════════════════════════════
+     SLIDE 5 — REDESIGN-SKILL (Leon)
+     Before/After split screen
+     ═══════════════════════════════════════════════ */
+  .slide-redesign{
+    background:#111118;
+    color:#f0f0f5;
+    padding:4rem;
+  }
+  .split-layout{
+    display:flex;gap:1.5rem;margin-top:2rem;
+    max-width:1100px;position:relative;z-index:2;
+  }
+  .split-panel{flex:1;border-radius:1.25rem;overflow:hidden;padding:2rem;min-height:380px;display:flex;flex-direction:column}
+  /* BEFORE — generic AI slop */
+  .panel-before{
+    background:#f5f5f5;color:#333;
+    font-family:Inter,Arial,sans-serif;
+    border:2px dashed #e53e3e;
+  }
+  .panel-before .badge{background:#e53e3e;color:#fff;font-size:0.6875rem;font-weight:700;padding:0.25rem 0.75rem;border-radius:100px;width:fit-content;margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:0.05em}
+  .panel-before h4{font-family:Inter,sans-serif;font-size:1.5rem;font-weight:700;color:#333;margin-bottom:0.75rem}
+  .panel-before .slop-card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:1rem;margin-bottom:0.75rem;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+  .panel-before .slop-card h5{font-family:Inter,sans-serif;font-size:0.875rem;color:#333}
+  .panel-before .slop-card p{font-size:0.75rem;color:#666;margin-top:0.25rem}
+  .panel-before .slop-btn{background:linear-gradient(135deg,#7c3aed,#3b82f6);color:#fff;border:none;padding:0.625rem 1.25rem;border-radius:100px;font-size:0.8125rem;font-family:Inter,sans-serif;margin-top:auto;cursor:pointer;width:fit-content}
+  /* AFTER — taste-skill applied */
+  .panel-after{
+    background:#0a0a0f;color:#f0f0f5;
+    border:2px solid #10b981;
+  }
+  .panel-after .badge{background:#10b981;color:#050508;font-family:'Geist Mono',monospace;font-size:0.6875rem;font-weight:700;padding:0.25rem 0.75rem;border-radius:4px;width:fit-content;margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:0.08em}
+  .panel-after h4{font-family:'Cabinet Grotesk',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.75rem}
+  .panel-after .taste-card-demo{background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem;margin-bottom:0.75rem;box-shadow:inset 0 1px 1px rgba(255,255,255,0.04)}
+  .panel-after .taste-card-demo h5{font-family:'Cabinet Grotesk',sans-serif;font-size:0.875rem;font-weight:700;letter-spacing:-0.01em}
+  .panel-after .taste-card-demo p{font-size:0.75rem;color:#71717a;margin-top:0.25rem;font-family:'Satoshi',sans-serif}
+  .panel-after .taste-btn{background:#f0f0f5;color:#050508;border:none;padding:0.625rem 1.25rem;border-radius:8px;font-size:0.8125rem;font-family:'Satoshi',sans-serif;font-weight:600;margin-top:auto;cursor:pointer;width:fit-content;transition:transform 0.2s cubic-bezier(0.16,1,0.3,1)}
+  .panel-after .taste-btn:hover{transform:translateY(-1px)}
+  .redesign-label{
+    font-family:'Geist Mono',monospace;font-size:0.625rem;
+    text-transform:uppercase;letter-spacing:0.15em;color:#52525b;
+    margin-bottom:0.5rem;
+  }
+  .redesign-title{
+    font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(1.75rem,3vw,2.5rem);
+    font-weight:800;letter-spacing:-0.02em;
+  }
+  .redesign-info .info-card{background:rgba(17,17,24,0.92);border:1px solid rgba(255,255,255,0.06);color:#f0f0f5}
+  .redesign-info .info-source{background:rgba(16,185,129,0.15);color:#10b981}
+  .redesign-info p{color:#a1a1aa}
+
+  /* ═══════════════════════════════════════════════
+     SLIDE 6 — MRGOONIE UI-UX-PRO-MAX
+     Data-driven, numbers, metrics
+     ═══════════════════════════════════════════════ */
+  .slide-mrgoonie{
+    background:#070714;
+    color:#f0f0f5;
+    padding:4rem;
+  }
+  .mrgoonie-orb{
+    position:absolute;width:400px;height:400px;border-radius:50%;
+    background:radial-gradient(circle,rgba(59,130,246,0.08) 0%,transparent 70%);
+    top:20%;right:10%;filter:blur(80px);
+  }
+  .mrgoonie-title{
+    font-family:'Cabinet Grotesk',sans-serif;
+    font-size:clamp(2rem,5vw,3.5rem);font-weight:900;
+    letter-spacing:-0.03em;line-height:1;
+    position:relative;z-index:2;
+  }
+  .mrgoonie-title .blue{color:#3b82f6}
+  .mrgoonie-stats{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:1rem;margin-top:3rem;position:relative;z-index:2;
+    max-width:900px;
+  }
+  .stat-block{
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:16px;padding:1.5rem;
+    text-align:center;
+    transition:border-color 0.3s;
+  }
+  .stat-block:hover{border-color:rgba(59,130,246,0.3)}
+  .stat-block .stat-num{
+    font-family:'Cabinet Grotesk',sans-serif;
+    font-size:2.5rem;font-weight:900;
+    letter-spacing:-0.04em;
+    background:linear-gradient(135deg,#3b82f6,#60a5fa);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .stat-block .stat-label{
+    font-family:'Geist Mono',monospace;font-size:0.5625rem;
+    text-transform:uppercase;letter-spacing:0.1em;color:#52525b;
+    margin-top:0.5rem;
+  }
+  .mrgoonie-skills-row{
+    display:flex;gap:0.75rem;margin-top:2rem;flex-wrap:wrap;
+    position:relative;z-index:2;
+  }
+  .mrgoonie-pill{
+    font-family:'Geist Mono',monospace;font-size:0.625rem;
+    padding:0.5rem 1rem;border-radius:100px;
+    background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.15);
+    color:#60a5fa;text-transform:uppercase;letter-spacing:0.08em;
+    transition:all 0.3s;cursor:default;
+  }
+  .mrgoonie-pill:hover{background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.3)}
+  .mrgoonie-info .info-card{background:rgba(7,7,20,0.9);border:1px solid rgba(59,130,246,0.15);color:#f0f0f5}
+  .mrgoonie-info .info-source{background:rgba(59,130,246,0.15);color:#60a5fa}
+  .mrgoonie-info p{color:#a1a1aa}
+
+  /* ═══════════════════════════════════════════════
+     SLIDE 7 — FRONTEND-DESIGN (Anthropic)
+     Bold, creative, unexpected
+     ═══════════════════════════════════════════════ */
+  .slide-anthropic{
+    background:#0f0f23;
+    color:#f0f0f5;
+    padding:4rem;
+    overflow:hidden;
+  }
+  .anthropic-bg-text{
+    position:absolute;
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(8rem,25vw,20rem);
+    font-weight:900;
+    text-transform:uppercase;
+    color:rgba(255,255,255,0.02);
+    letter-spacing:-0.05em;
+    line-height:0.85;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    white-space:nowrap;
+    pointer-events:none;
+    z-index:1;
+  }
+  .anthropic-content{
+    position:relative;z-index:10;
+    display:flex;flex-direction:column;gap:2rem;
+  }
+  .anthropic-eyebrow{
+    font-family:'Geist Mono',monospace;font-size:0.625rem;
+    text-transform:uppercase;letter-spacing:0.2em;color:#f59e0b;
+  }
+  .anthropic-title{
+    font-family:'Outfit',sans-serif;
+    font-size:clamp(2.5rem,6vw,4.5rem);
+    font-weight:900;line-height:1;letter-spacing:-0.03em;
+  }
+  .anthropic-title .gradient-text{
+    background:linear-gradient(135deg,#f59e0b,#ef4444,#ec4899);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  /* Floating creative cards with rotation */
+  .creative-cards{
+    display:flex;gap:1.25rem;margin-top:1rem;
+    flex-wrap:wrap;
+  }
+  .creative-card{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:20px;padding:1.75rem;
+    width:220px;
+    transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
+    position:relative;overflow:hidden;
+  }
+  .creative-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    border-radius:20px 20px 0 0;
+  }
+  .creative-card:nth-child(1)::before{background:linear-gradient(90deg,#f59e0b,#ef4444)}
+  .creative-card:nth-child(2)::before{background:linear-gradient(90deg,#ec4899,#8b5cf6)}
+  .creative-card:nth-child(3)::before{background:linear-gradient(90deg,#10b981,#3b82f6)}
+  .creative-card:nth-child(4)::before{background:linear-gradient(90deg,#3b82f6,#06b6d4)}
+  .creative-card:hover{transform:translateY(-4px) rotate(0.5deg);border-color:rgba(255,255,255,0.15)}
+  .creative-card h4{font-family:'Outfit',sans-serif;font-weight:800;font-size:1rem;margin-bottom:0.5rem}
+  .creative-card p{font-size:0.75rem;color:#71717a;line-height:1.5;font-family:'Satoshi',sans-serif}
+  .anthropic-info .info-card{background:rgba(15,15,35,0.9);border:1px solid rgba(245,158,11,0.15);color:#f0f0f5}
+  .anthropic-info .info-source{background:rgba(245,158,11,0.15);color:#f59e0b}
+  .anthropic-info p{color:#a1a1aa}
+
+  /* ═══════════════════════════════════════════════
+     SLIDE 8 — DESIGN ROUTER (Custom)
+     Show the routing in action
+     ═══════════════════════════════════════════════ */
+  .slide-router{
+    background:#050508;
+    color:#f0f0f5;
+    padding:4rem;
+  }
+  .router-title{
+    font-family:'Cabinet Grotesk',sans-serif;
+    font-size:clamp(2rem,4vw,3rem);font-weight:900;
+    letter-spacing:-0.03em;
+  }
+  .routing-demo-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:1rem;margin-top:2.5rem;max-width:1000px;
+  }
+  .route-card{
+    border-radius:16px;padding:1.75rem;
+    position:relative;overflow:hidden;
+    transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    min-height:180px;display:flex;flex-direction:column;justify-content:flex-end;
+  }
+  .route-card:hover{transform:scale(1.02)}
+  .route-card .route-type{font-family:'Geist Mono',monospace;font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem}
+  .route-card h4{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:1.125rem;letter-spacing:-0.01em;margin-bottom:0.25rem}
+  .route-card .route-skill{font-family:'Geist Mono',monospace;font-size:0.625rem;opacity:0.6}
+  /* Each card visually represents its destination style */
+  .route-saas{background:#0a0a0f;border:1px solid rgba(16,185,129,0.2);color:#f0f0f5}
+  .route-saas .route-type{color:#10b981}
+  .route-luxury{background:#FDFBF7;color:#1a1a1a;border:1px solid rgba(0,0,0,0.06)}
+  .route-luxury h4{font-family:'Playfair Display',serif;font-weight:700;font-style:italic}
+  .route-luxury .route-type{color:#8B7355}
+  .route-luxury .route-skill{color:#8B8680}
+  .route-editorial{background:#FFFFFF;color:#111111;border:1px solid #EAEAEA}
+  .route-editorial .route-type{color:#346538}
+  .route-editorial .route-skill{color:#787774}
+  .route-terminal{background:#0a0a0a;color:#00ff41;border:1px solid rgba(0,255,65,0.2);font-family:'Space Mono',monospace}
+  .route-terminal .route-type{color:#ff0000}
+  .route-creative{background:#0f0f23;color:#f0f0f5;border:1px solid rgba(245,158,11,0.2)}
+  .route-creative .route-type{color:#f59e0b}
+  .route-mobile{background:#070714;color:#f0f0f5;border:1px solid rgba(59,130,246,0.2)}
+  .route-mobile .route-type{color:#3b82f6}
+  .router-info .info-card{background:rgba(5,5,8,0.9);border:1px solid rgba(168,85,247,0.15);color:#f0f0f5}
+  .router-info .info-source{background:rgba(168,85,247,0.15);color:#a855f7}
+  .router-info p{color:#a1a1aa}
+
+  /* ═══════════════════════════════════════════════
+     SLIDE 9 — OUTPUT-SKILL + STITCH (Leon)
+     Terminal-like, code display
+     ═══════════════════════════════════════════════ */
+  .slide-output{
+    background:#0c0c14;
+    color:#f0f0f5;
+    padding:4rem;
+    font-family:'Geist Mono',monospace;
+  }
+  .output-title{
+    font-family:'Cabinet Grotesk',sans-serif;
+    font-size:clamp(2rem,4vw,3rem);font-weight:900;
+    letter-spacing:-0.03em;margin-bottom:2rem;
+  }
+  .code-blocks{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:1.5rem;max-width:1000px;
+  }
+  .code-block{
+    background:#111118;border:1px solid rgba(255,255,255,0.06);
+    border-radius:12px;overflow:hidden;
+  }
+  .code-header{
+    padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);
+    display:flex;align-items:center;gap:0.5rem;
+    font-size:0.625rem;text-transform:uppercase;letter-spacing:0.1em;color:#52525b;
+  }
+  .code-dot{width:8px;height:8px;border-radius:50%}
+  .code-dot.red{background:#ef4444}
+  .code-dot.green{background:#10b981}
+  .code-body{
+    padding:1.25rem;font-size:0.75rem;line-height:1.8;
+    color:#a1a1aa;
+  }
+  .code-body .keyword{color:#c084fc}
+  .code-body .string{color:#10b981}
+  .code-body .comment{color:#52525b;font-style:italic}
+  .code-body .banned{color:#ef4444;text-decoration:line-through;opacity:0.5}
+  .code-body .enforced{color:#10b981}
+  .output-info .info-card{background:rgba(12,12,20,0.92);border:1px solid rgba(192,132,252,0.15);color:#f0f0f5}
+  .output-info .info-source{background:rgba(16,185,129,0.15);color:#10b981}
+  .output-info p{color:#a1a1aa}
+
+  /* ═══════════════════════════════════════════════
+     SLIDE 10 — FINALE
+     ═══════════════════════════════════════════════ */
+  .slide-finale{
+    background:#050508;color:#f0f0f5;
+    font-family:'Cabinet Grotesk',sans-serif;
+    align-items:center;text-align:center;
+    padding:4rem;
+  }
+  .finale-title{
+    font-size:clamp(2.5rem,6vw,5rem);
+    font-weight:900;line-height:0.95;letter-spacing:-0.04em;
+  }
+  .finale-title em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:#10b981}
+  .finale-install{
+    font-family:'Geist Mono',monospace;font-size:0.8125rem;
+    padding:0.75rem 1.5rem;background:#111118;
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:8px;color:#10b981;margin-top:3rem;
+    display:inline-block;
+  }
+  .finale-credits{
+    margin-top:4rem;font-family:'Geist Mono',monospace;
+    font-size:0.5625rem;text-transform:uppercase;
+    letter-spacing:0.12em;color:#52525b;
+    display:flex;gap:3rem;
+  }
+  .finale-credits a{color:#52525b;text-decoration:none;transition:color 0.2s}
+  .finale-credits a:hover{color:#f0f0f5}
 </style>
 </head>
 <body>
 
-<!-- NAV — minimalist-skill clean nav -->
-<nav>
-  <div class="logo">
-    <span class="dot"></span>
-    UIUX High Taste
-  </div>
-  <ul class="nav-links">
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#techniques">Techniques</a></li>
-    <li><a href="#routing">Routing</a></li>
-    <li><a href="https://github.com/Payoss/UIUX-high-taste-skill" target="_blank">GitHub</a></li>
-  </ul>
-</nav>
-
-<!-- HERO — soft-skill: Ethereal Glass + editorial serif accent -->
-<section class="hero">
-  <div class="hero-eyebrow">Design Intelligence Collection</div>
-  <h1>Stop building<br>websites that look<br>like <span class="serif-accent">every other</span><br>AI output.</h1>
-  <p class="hero-subtitle">21 curated design skills that teach AI agents to produce premium, distinctive interfaces. Anti-slop rules, agency-level aesthetics, and intelligent routing.</p>
-  <div class="hero-meta">
-    <div class="stat">
-      <span class="stat-value">21</span>
-      <span class="stat-label">Design Skills</span>
-    </div>
-    <div class="stat">
-      <span class="stat-value">3</span>
-      <span class="stat-label">Sources</span>
-    </div>
-    <div class="stat">
-      <span class="stat-value">147+</span>
-      <span class="stat-label">Anti-Slop Rules</span>
-    </div>
+<!-- ═══ SLIDE 0 — INTRO ═══ -->
+<section class="slide slide-intro">
+  <div class="intro-eyebrow">UIUX High Taste Skill Collection</div>
+  <h1>Scroll to <em>discover</em><br>every skill.</h1>
+  <p class="intro-sub">Each section is styled using the actual skill it presents. You're not reading about design — you're experiencing it.</p>
+  <div class="scroll-down">
+    Scroll down to begin
+    <span class="scroll-arrow"></span>
   </div>
 </section>
 
-<!-- SKILLS GRID — soft-skill: double-bezel cards -->
-<section id="skills">
-  <div class="section-label">01 — Skill Collection</div>
-  <h2 class="section-title">Every skill, explained.</h2>
-  <p class="section-desc">Each skill has a specific purpose. Some define aesthetics, others enforce quality. Combined, they produce interfaces that feel designed by humans.</p>
-
-  <div class="skills-grid">
-
-    <!-- taste-skill — FEATURED -->
-    <div class="skill-card featured">
-      <div class="skill-card-inner">
-        <span class="card-source source-leon">Leonxlnx</span>
-        <h3 class="card-title">taste-skill</h3>
-        <p class="card-description">The core anti-slop engine. Defines 3 dials (Variance, Motion, Density) that control every design decision. Bans Inter font, purple AI gradients, centered heroes, 3-column equal card grids. Forces premium typography (Geist, Satoshi, Cabinet Grotesk), calibrated color palettes (max 1 accent, saturation below 80%), and spring-based motion physics.</p>
-        <div class="card-tags">
-          <span class="tag">Typography</span>
-          <span class="tag">Color System</span>
-          <span class="tag">Layout</span>
-          <span class="tag">Motion</span>
-          <span class="tag">Anti-Patterns</span>
-        </div>
+<!-- ═══ SLIDE 1 — TASTE-SKILL ═══ -->
+<section class="slide slide-taste taste-info">
+  <div class="taste-orb-1"></div>
+  <div class="taste-orb-2"></div>
+  <h2 class="hero-title-taste">
+    The <span class="taste-accent">anti-slop</span><br>design engine.
+  </h2>
+  <div class="taste-cards">
+    <div class="taste-demo-card">
+      <div class="taste-demo-card-inner">
+        <div class="card-num">Rule 01 — Typography</div>
+        <h4>Inter is banned.</h4>
+        <p>Force Geist, Satoshi, Cabinet Grotesk, or Outfit. Serif banned in dashboards. Monospace for data.</p>
       </div>
     </div>
-
-    <!-- soft-skill -->
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <span class="card-source source-leon">Leonxlnx</span>
-        <h3 class="card-title">soft-skill</h3>
-        <p class="card-description">Agency-level luxury. Double-bezel card architecture (outer shell + inner core like machined hardware), spring physics motion, cinematic scroll reveals. Three vibes: Ethereal Glass (SaaS), Editorial Luxury (agency), Soft Structuralism (portfolio).</p>
-        <div class="card-tags">
-          <span class="tag">$150k Agency</span>
-          <span class="tag">Haptic Depth</span>
-          <span class="tag">Micro-Interactions</span>
-        </div>
+    <div class="taste-demo-card">
+      <div class="taste-demo-card-inner">
+        <div class="card-num">Rule 02 — Color</div>
+        <h4>Max 1 accent. No purple.</h4>
+        <p>Saturation below 80%. The "AI purple gradient" is the #1 tell. Neutral bases + singular accent.</p>
       </div>
     </div>
-
-    <!-- redesign-skill -->
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <span class="card-source source-leon">Leonxlnx</span>
-        <h3 class="card-title">redesign-skill</h3>
-        <p class="card-description">Audit checklist for existing projects. Scans typography, color, layout, interactivity, content, components, icons, and code quality. 80+ specific problems to detect and fix. Priority order: font swap, color cleanup, hover states, layout, components, states, polish.</p>
-        <div class="card-tags">
-          <span class="tag">Audit</span>
-          <span class="tag">Upgrade</span>
-          <span class="tag">Checklist</span>
-        </div>
+    <div class="taste-demo-card">
+      <div class="taste-demo-card-inner">
+        <div class="card-num">Rule 03 — Layout</div>
+        <h4>No centered heroes.</h4>
+        <p>3-column equal cards = banned. Force split screen, asymmetric grids, bento. CSS Grid over Flexbox math.</p>
       </div>
     </div>
-
-    <!-- minimalist-skill -->
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <span class="card-source source-leon">Leonxlnx</span>
-        <h3 class="card-title">minimalist-skill</h3>
-        <p class="card-description">Notion/Linear editorial aesthetic. Warm monochrome palette (#F7F6F3 canvas), bento grids with 1px borders, zero gradients, desaturated pastel accents. Lyon Text serif for headlines, Geist Sans for body. Ultra-flat, document-style interfaces.</p>
-        <div class="card-tags">
-          <span class="tag">Editorial</span>
-          <span class="tag">Notion-Like</span>
-          <span class="tag">Content-First</span>
-        </div>
+    <div class="taste-demo-card">
+      <div class="taste-demo-card-inner">
+        <div class="card-num">Rule 04 — Motion</div>
+        <h4>Spring physics only.</h4>
+        <p>Stiffness 100, damping 20. Staggered cascade reveals. Never mount everything at once. GPU-accelerated only.</p>
       </div>
     </div>
-
-    <!-- brutalist-skill -->
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <span class="card-source source-leon">Leonxlnx</span>
-        <h3 class="card-title">brutalist-skill</h3>
-        <p class="card-description">Raw industrial + Swiss typographic print meets military terminal. Two modes: Swiss Industrial (light, heavy sans-serif, red accent) or Tactical CRT (dark, monospace, phosphor glow). Extreme type scale contrast, halftone filters, scanlines. For dashboards and data-heavy UIs.</p>
-        <div class="card-tags">
-          <span class="tag">Industrial</span>
-          <span class="tag">CRT Terminal</span>
-          <span class="tag">Data-Dense</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- stitch-skill -->
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <span class="card-source source-leon">Leonxlnx</span>
-        <h3 class="card-title">stitch-skill</h3>
-        <p class="card-description">Generates DESIGN.md files for Google Stitch AI. Translates anti-slop rules into Stitch's semantic language. Configurable dials (Creativity, Density, Variance, Motion). Outputs structured design specs that external tools can interpret.</p>
-        <div class="card-tags">
-          <span class="tag">Google Stitch</span>
-          <span class="tag">DESIGN.md</span>
-          <span class="tag">Semantic</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- output-skill -->
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <span class="card-source source-leon">Leonxlnx</span>
-        <h3 class="card-title">output-skill</h3>
-        <p class="card-description">Anti-laziness enforcement. Bans truncation, placeholder text, "TODO" comments, ellipsis shortcuts. Forces complete, production-ready output. If token-limited, uses clean [PAUSED] breakpoints with resume protocol instead of compression.</p>
-        <div class="card-tags">
-          <span class="tag">Anti-Lazy</span>
-          <span class="tag">Exhaustive</span>
-          <span class="tag">Production-Ready</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- mrgoonie ui-ux-pro-max — FEATURED -->
-    <div class="skill-card featured">
-      <div class="skill-card-inner">
-        <span class="card-source source-mrgoonie">mrgoonie / nextlevelbuilder</span>
-        <h3 class="card-title">ui-ux-pro-max</h3>
-        <p class="card-description">Complete design intelligence: 50+ styles, 161 color palettes, 57 font pairings, 161 product types, 99 UX guidelines, 25 chart types across 10 tech stacks (React, Next.js, Vue, Svelte, SwiftUI, Flutter, etc.). Priority-based rules from accessibility (critical) down to charts. Searchable database with domain-specific recommendations.</p>
-        <div class="card-tags">
-          <span class="tag">161 Palettes</span>
-          <span class="tag">57 Font Pairs</span>
-          <span class="tag">99 UX Rules</span>
-          <span class="tag">10 Stacks</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- mrgoonie design-system -->
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <span class="card-source source-mrgoonie">mrgoonie / nextlevelbuilder</span>
-        <h3 class="card-title">mrgoonie-design-system</h3>
-        <p class="card-description">Token architecture from primitive to semantic to component level. Generates design tokens JSON, CSS variables, Tailwind config. Includes slide data (backgrounds, charts, typography, layouts) and validation scripts.</p>
-        <div class="card-tags">
-          <span class="tag">Tokens</span>
-          <span class="tag">Tailwind</span>
-          <span class="tag">Components</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- mrgoonie brand -->
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <span class="card-source source-mrgoonie">mrgoonie / nextlevelbuilder</span>
-        <h3 class="card-title">mrgoonie-brand</h3>
-        <p class="card-description">Complete brand identity framework. Voice, visual identity, typography specs, color palette management, logo usage rules, messaging framework, consistency checklist. Includes scripts for color extraction and brand-to-token synchronization.</p>
-        <div class="card-tags">
-          <span class="tag">Brand Voice</span>
-          <span class="tag">Identity</span>
-          <span class="tag">Guidelines</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- mrgoonie design -->
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <span class="card-source source-mrgoonie">mrgoonie / nextlevelbuilder</span>
-        <h3 class="card-title">mrgoonie-design</h3>
-        <p class="card-description">Design router covering logos (55 styles, 30 palettes), icons (15 styles), CIP (50 deliverables: business cards, signage, vehicles), banners, social photos, and slides. Includes prompt engineering references for AI image generation.</p>
-        <div class="card-tags">
-          <span class="tag">Logos</span>
-          <span class="tag">CIP</span>
-          <span class="tag">Slides</span>
-          <span class="tag">Icons</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- frontend-design -->
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <span class="card-source source-anthropic">Anthropic Official</span>
-        <h3 class="card-title">frontend-design</h3>
-        <p class="card-description">Anthropic's most popular skill (277K+ installs). Breaks "distributional convergence" — the tendency of AI to produce the same generic aesthetics. Forces bold creative direction, unexpected font choices, distinctive color schemes. "No design should be the same."</p>
-        <div class="card-tags">
-          <span class="tag">277K Installs</span>
-          <span class="tag">Creative Freedom</span>
-          <span class="tag">Official</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- design-router — CUSTOM -->
-    <div class="skill-card">
-      <div class="skill-card-inner">
-        <span class="card-source source-custom">Custom / Payos</span>
-        <h3 class="card-title">design-router</h3>
-        <p class="card-description">Intelligent dispatcher that auto-selects the right skills based on project type, industry, and aesthetic intent. Maps SaaS to taste-skill, luxury to soft-skill, editorial to minimalist, dev tools to brutalist. Always loads taste-skill as baseline protection.</p>
-        <div class="card-tags">
-          <span class="tag">Auto-Routing</span>
-          <span class="tag">12 Project Types</span>
-          <span class="tag">10 Industries</span>
-        </div>
-      </div>
-    </div>
-
+  </div>
+  <div class="info-card">
+    <span class="info-source">Leonxlnx / taste-skill</span>
+    <h3>taste-skill</h3>
+    <p>The foundation. 3 configurable dials (Variance 8, Motion 6, Density 4) drive every design rule. This dark page with emerald accent, grain overlay, ambient mesh gradients, and spring-eased cards is taste-skill in action.</p>
+    <div class="scroll-hint">Scroll for next skill ↓</div>
   </div>
 </section>
 
-<!-- TECHNIQUES — brutalist-skill: rigid grid, numbers -->
-<section id="techniques">
-  <div class="section-label">02 — Key Techniques Applied Here</div>
-  <h2 class="section-title">What you're looking at<br>right now.</h2>
-  <p class="section-desc">This page uses techniques from multiple skills. Here's what came from where.</p>
-
-  <div class="techniques-grid">
-    <div class="technique-cell">
-      <div class="technique-number">01</div>
-      <div class="technique-origin">taste-skill / Leonxlnx</div>
-      <div class="technique-name">Grain Overlay</div>
-      <div class="technique-desc">SVG noise filter at 2.5% opacity fixed over the entire viewport. Breaks digital flatness without performance cost. pointer-events: none so it never blocks interaction.</div>
+<!-- ═══ SLIDE 2 — SOFT-SKILL ═══ -->
+<section class="slide slide-soft soft-info">
+  <div class="soft-noise"></div>
+  <h2 class="hero-title-soft">
+    Design like a<br><span class="italic-accent">$150k agency.</span>
+  </h2>
+  <p class="soft-subtitle">Warm creams, editorial serif headlines, double-bezel card architecture, and haptic micro-interactions that make interfaces feel like machined hardware.</p>
+  <div class="soft-bento">
+    <div class="soft-cell span-2">
+      <div class="soft-cell-inner">
+        <div class="cell-label">Technique</div>
+        <div class="cell-value">Double Bezel</div>
+        <div class="cell-desc">Outer shell (padding + border) wraps an inner core (distinct background + inset highlight). Like a glass plate in an aluminum tray.</div>
+      </div>
     </div>
-    <div class="technique-cell">
-      <div class="technique-number">02</div>
-      <div class="technique-origin">soft-skill / Leonxlnx</div>
-      <div class="technique-name">Double-Bezel Cards</div>
-      <div class="technique-desc">Each card has an outer shell (2px padding, subtle border) and an inner core (distinct background + inset highlight). Creates a "machined hardware" depth that flat cards can't achieve.</div>
+    <div class="soft-cell">
+      <div class="soft-cell-inner">
+        <div class="cell-label">Vibes</div>
+        <div class="cell-value">3</div>
+        <div class="cell-desc">Ethereal Glass, Editorial Luxury, Soft Structuralism</div>
+      </div>
     </div>
-    <div class="technique-cell">
-      <div class="technique-number">03</div>
-      <div class="technique-origin">taste-skill / Leonxlnx</div>
-      <div class="technique-name">Ambient Mesh Gradients</div>
-      <div class="technique-desc">Blurred radial gradients (emerald + blue) floating behind the hero with CSS animation. The "Ethereal Glass" archetype from the taste-skill creative variance engine.</div>
+    <div class="soft-cell">
+      <div class="soft-cell-inner">
+        <div class="cell-label">Motion</div>
+        <div class="cell-value">Spring</div>
+        <div class="cell-desc">stiffness: 100, damping: 20 — weighty, cinematic</div>
+      </div>
     </div>
-    <div class="technique-cell">
-      <div class="technique-number">04</div>
-      <div class="technique-origin">taste-skill / Leonxlnx</div>
-      <div class="technique-name">Staggered Cascade Animation</div>
-      <div class="technique-desc">Cards mount with incremental delays (100ms per card). fadeUp animation with cubic-bezier(0.16, 1, 0.3, 1) easing — the spring-physics feel. Never mount everything at once.</div>
+    <div class="soft-cell">
+      <div class="soft-cell-inner">
+        <div class="cell-label">Archetype</div>
+        <div class="cell-value" style="font-style:italic">Luxury</div>
+        <div class="cell-desc">This slide uses the Editorial Luxury vibe — warm tones, serif headlines, film grain</div>
+      </div>
     </div>
-    <div class="technique-cell">
-      <div class="technique-number">05</div>
-      <div class="technique-origin">soft-skill / Leonxlnx</div>
-      <div class="technique-name">Serif Accent in Headlines</div>
-      <div class="technique-desc">Mixing Cabinet Grotesk (900 weight sans-serif) with Instrument Serif italic for the word "every other". Creates typographic tension and editorial sophistication.</div>
-    </div>
-    <div class="technique-cell">
-      <div class="technique-number">06</div>
-      <div class="technique-origin">minimalist-skill / Leonxlnx</div>
-      <div class="technique-name">Mono Metadata Pattern</div>
-      <div class="technique-desc">All labels, navigation, and metadata use Geist Mono at 9-11px, uppercase, with generous letter-spacing. Creates a clear hierarchy: display font for attention, mono for system information.</div>
-    </div>
-    <div class="technique-cell">
-      <div class="technique-number">07</div>
-      <div class="technique-origin">brutalist-skill / Leonxlnx</div>
-      <div class="technique-name">Swiss Grid Data Layout</div>
-      <div class="technique-desc">The techniques grid itself uses a rigid 2-column structure with visible borders — no rounded corners, no shadows. Oversized numbers at low opacity create structural rhythm. Pure Swiss typographic print influence.</div>
-    </div>
-    <div class="technique-cell">
-      <div class="technique-number">08</div>
-      <div class="technique-origin">mrgoonie-ui-ux-pro-max</div>
-      <div class="technique-name">Accessibility + Touch Targets</div>
-      <div class="technique-desc">All interactive elements meet 44px minimum touch target. Color contrast ratios verified. Focus states on nav links. Semantic HTML throughout. Priority 1-2 rules from the UX guidelines database.</div>
-    </div>
+  </div>
+  <div class="info-card">
+    <span class="info-source">Leonxlnx / soft-skill</span>
+    <h3>soft-skill</h3>
+    <p>Agency-level aesthetics. This warm cream page with Playfair Display serif, noise texture overlay, and asymmetric bento grid with nested double-bezel cells is the soft-skill "Editorial Luxury" archetype.</p>
+    <div class="scroll-hint">Scroll for next skill ↓</div>
   </div>
 </section>
 
-<!-- ROUTING TABLE — minimalist-skill: Notion-like data table -->
-<section id="routing">
-  <div class="section-label">03 — Design Router</div>
-  <h2 class="section-title">What gets loaded<br>when you build.</h2>
-  <p class="section-desc">The design-router skill automatically selects the right combination based on what you're building.</p>
-
-  <div class="routing-table">
-    <div class="routing-row header">
-      <div class="routing-cell header-cell">Project Type</div>
-      <div class="routing-cell header-cell">Primary Skill</div>
-      <div class="routing-cell header-cell">Aesthetic</div>
+<!-- ═══ SLIDE 3 — MINIMALIST-SKILL ═══ -->
+<section class="slide slide-minimal minimal-info">
+  <h2 class="minimal-header">Clean, editorial,<br>content-first.</h2>
+  <p class="minimal-sub">The Notion / Linear aesthetic. Warm monochrome, desaturated pastel accents, 1px structural borders, zero gradients. Typography does all the work.</p>
+  <div class="bento-grid">
+    <div class="bento-cell">
+      <div class="bento-icon pastel-blue">T</div>
+      <h4>Typography</h4>
+      <p>Geist Sans body, Lyon Text serif headlines. Off-black #111 text, never pure #000.</p>
     </div>
-    <div class="routing-row">
-      <div class="routing-cell"><span class="type-label">SaaS / Dashboard</span></div>
-      <div class="routing-cell"><span class="skill-pill">taste-skill</span></div>
-      <div class="routing-cell" style="color:var(--text-secondary)">Ethereal Glass</div>
+    <div class="bento-cell">
+      <div class="bento-icon pastel-green">C</div>
+      <h4>Colors</h4>
+      <p>Canvas #F7F6F3. Borders #EAEAEA. Desaturated pastels only for accent tags.</p>
     </div>
-    <div class="routing-row">
-      <div class="routing-cell"><span class="type-label">Landing Page</span></div>
-      <div class="routing-cell"><span class="skill-pill">frontend-design</span></div>
-      <div class="routing-cell" style="color:var(--text-secondary)">Bold + Unique</div>
+    <div class="bento-cell">
+      <div class="bento-icon pastel-yellow">L</div>
+      <h4>Layout</h4>
+      <p>Asymmetric bento grids. 1px borders, 8-12px radius. Zero heavy shadows.</p>
     </div>
-    <div class="routing-row">
-      <div class="routing-cell"><span class="type-label">Portfolio / Agency</span></div>
-      <div class="routing-cell"><span class="skill-pill">soft-skill</span></div>
-      <div class="routing-cell" style="color:var(--text-secondary)">Luxury Editorial</div>
+    <div class="bento-cell">
+      <div class="bento-icon pastel-red">B</div>
+      <h4>Buttons</h4>
+      <p>Solid #111 background. 4-6px radius. No pill shapes. No gradients. No box-shadow.</p>
     </div>
-    <div class="routing-row">
-      <div class="routing-cell"><span class="type-label">Blog / Editorial</span></div>
-      <div class="routing-cell"><span class="skill-pill">minimalist-skill</span></div>
-      <div class="routing-cell" style="color:var(--text-secondary)">Notion / Linear</div>
+    <div class="bento-cell">
+      <div class="bento-icon pastel-purple">A</div>
+      <h4>Animation</h4>
+      <p>Invisible — present but never distracting. Fade-in, subtle hover shifts. That's it.</p>
     </div>
-    <div class="routing-row">
-      <div class="routing-cell"><span class="type-label">Data Dashboard</span></div>
-      <div class="routing-cell"><span class="skill-pill">brutalist-skill</span></div>
-      <div class="routing-cell" style="color:var(--text-secondary)">CRT Terminal</div>
+    <div class="bento-cell">
+      <div class="bento-icon pastel-orange">S</div>
+      <h4>Spacing</h4>
+      <p>Macro-whitespace between sections. 24-40px internal padding. Let it breathe.</p>
     </div>
-    <div class="routing-row">
-      <div class="routing-cell"><span class="type-label">Developer Tools</span></div>
-      <div class="routing-cell"><span class="skill-pill">brutalist-skill</span></div>
-      <div class="routing-cell" style="color:var(--text-secondary)">Swiss Industrial</div>
-    </div>
-    <div class="routing-row">
-      <div class="routing-cell"><span class="type-label">E-commerce</span></div>
-      <div class="routing-cell"><span class="skill-pill">ui-ux-pro-max</span></div>
-      <div class="routing-cell" style="color:var(--text-secondary)">UX-First</div>
-    </div>
-    <div class="routing-row">
-      <div class="routing-cell"><span class="type-label">Corporate Site</span></div>
-      <div class="routing-cell"><span class="skill-pill">taste-skill</span></div>
-      <div class="routing-cell" style="color:var(--text-secondary)">Professional Clean</div>
-    </div>
-    <div class="routing-row">
-      <div class="routing-cell"><span class="type-label">Creative / Art</span></div>
-      <div class="routing-cell"><span class="skill-pill">frontend-design</span></div>
-      <div class="routing-cell" style="color:var(--text-secondary)">Maximum Freedom</div>
-    </div>
-    <div class="routing-row">
-      <div class="routing-cell"><span class="type-label">Mobile App</span></div>
-      <div class="routing-cell"><span class="skill-pill">ui-ux-pro-max</span></div>
-      <div class="routing-cell" style="color:var(--text-secondary)">10 Stacks</div>
-    </div>
+  </div>
+  <div class="info-card">
+    <span class="info-source">Leonxlnx / minimalist-skill</span>
+    <h3>minimalist-skill</h3>
+    <p>This white page with warm borders, pastel icon backgrounds, clean bento grid, and Satoshi font is the minimalist-skill protocol. Every element follows the "ultra-flat, document-style" directive.</p>
+    <div class="scroll-hint">Scroll for next skill ↓</div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-section">
-  <h2 class="section-title" style="max-width: 600px; margin: 0 auto 1.5rem;">Install once.<br>Build <span style="font-family:var(--font-serif);font-style:italic;color:var(--accent-emerald)">everything</span> better.</h2>
-  <p class="section-desc" style="margin: 0 auto 3rem; text-align: center;">
-    <code style="font-family:var(--font-mono);font-size:0.8125rem;padding:0.5rem 1rem;background:var(--surface-elevated);border:1px solid var(--border-whisper);border-radius:8px;color:var(--accent-emerald)">npx skills add https://github.com/Payoss/UIUX-high-taste-skill</code>
-  </p>
-  <a href="https://github.com/Payoss/UIUX-high-taste-skill" class="cta-button" target="_blank">
-    View on GitHub
-    <span class="arrow">&nearr;</span>
-  </a>
+<!-- ═══ SLIDE 4 — BRUTALIST-SKILL ═══ -->
+<section class="slide slide-brutalist brutalist-info">
+  <div class="scanlines"></div>
+  <div class="brutalist-title">DATA<br><span class="red">//</span>RAW</div>
+  <div class="brutalist-meta">
+    SYS.INTERFACE > TACTICAL_TELEMETRY > STATUS:ACTIVE<span class="cursor-blink"></span>
+  </div>
+  <div class="swiss-grid">
+    <div class="swiss-cell">
+      <div class="cell-id">SYS.FONT</div>
+      <div class="cell-val">MONO</div>
+      <div class="cell-unit">Space Mono / JetBrains</div>
+    </div>
+    <div class="swiss-cell">
+      <div class="cell-id">SYS.MODE</div>
+      <div class="cell-val">CRT</div>
+      <div class="cell-unit">Phosphor glow active</div>
+    </div>
+    <div class="swiss-cell">
+      <div class="cell-id">SYS.COLOR</div>
+      <div class="cell-val">#00FF41</div>
+      <div class="cell-unit">Terminal green only</div>
+    </div>
+    <div class="swiss-cell">
+      <div class="cell-id">SYS.SHADOW</div>
+      <div class="cell-val">NONE</div>
+      <div class="cell-unit">Gradients prohibited</div>
+    </div>
+    <div class="swiss-cell">
+      <div class="cell-id">SYS.SCALE</div>
+      <div class="cell-val">10REM</div>
+      <div class="cell-unit">Extreme type contrast</div>
+    </div>
+    <div class="swiss-cell">
+      <div class="cell-id">SYS.GRID</div>
+      <div class="cell-val">RIGID</div>
+      <div class="cell-unit">Swiss modular grid</div>
+    </div>
+    <div class="swiss-cell">
+      <div class="cell-id">SYS.FX</div>
+      <div class="cell-val">SCAN</div>
+      <div class="cell-unit">CRT scanlines active</div>
+    </div>
+    <div class="swiss-cell">
+      <div class="cell-id">SYS.CASE</div>
+      <div class="cell-val">UPPER</div>
+      <div class="cell-unit">All metadata uppercase</div>
+    </div>
+  </div>
+  <div class="info-card">
+    <span class="info-source">Leonxlnx / brutalist-skill</span>
+    <h3>brutalist-skill</h3>
+    <p>CRT Terminal mode. Scanline overlay, phosphor green glow, monospace font, massive Archivo Black headlines, rigid Swiss grid with visible borders. For data dashboards and dev tools. No gradients, no soft shadows — raw functionality.</p>
+    <div class="scroll-hint">Scroll for next skill ↓</div>
+  </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-left">UIUX High Taste Skill Collection &mdash; Curated by Payos</div>
-  <div class="footer-right">
+<!-- ═══ SLIDE 5 — REDESIGN-SKILL ═══ -->
+<section class="slide slide-redesign redesign-info">
+  <div class="redesign-label">Before / After — Live comparison</div>
+  <h2 class="redesign-title">What redesign-skill<br>actually fixes.</h2>
+  <div class="split-layout">
+    <div class="split-panel panel-before">
+      <div class="badge">Before — AI Slop</div>
+      <h4>Elevate Your Workflow</h4>
+      <div class="slop-card">
+        <h5>Seamless Integration</h5>
+        <p>Next-gen platform for your team</p>
+      </div>
+      <div class="slop-card">
+        <h5>Unleash Productivity</h5>
+        <p>Game-changing features at scale</p>
+      </div>
+      <button class="slop-btn">Get Started Free</button>
+    </div>
+    <div class="split-panel panel-after">
+      <div class="badge">After — Taste Applied</div>
+      <h4>Ship faster, together.</h4>
+      <div class="taste-card-demo">
+        <h5>Real-time editing</h5>
+        <p>Collaborative workspace with conflict resolution</p>
+      </div>
+      <div class="taste-card-demo">
+        <h5>Deploy in 47 seconds</h5>
+        <p>Zero-config CI/CD from any branch</p>
+      </div>
+      <button class="taste-btn">Start building</button>
+    </div>
+  </div>
+  <div class="info-card">
+    <span class="info-source">Leonxlnx / redesign-skill</span>
+    <h3>redesign-skill</h3>
+    <p>80+ specific problems to audit: Inter font, purple gradients, "Elevate" copy, pill buttons, generic shadows, fake round numbers. Left panel = what AI produces by default. Right = after taste-skill rules apply. The audit checklist catches every generic pattern.</p>
+    <div class="scroll-hint">Scroll for next skill ↓</div>
+  </div>
+</section>
+
+<!-- ═══ SLIDE 6 — MRGOONIE UI-UX-PRO-MAX ═══ -->
+<section class="slide slide-mrgoonie mrgoonie-info">
+  <div class="mrgoonie-orb"></div>
+  <h2 class="mrgoonie-title">
+    The <span class="blue">intelligence</span><br>database.
+  </h2>
+  <div class="mrgoonie-stats">
+    <div class="stat-block">
+      <div class="stat-num">161</div>
+      <div class="stat-label">Color Palettes</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">57</div>
+      <div class="stat-label">Font Pairings</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">99</div>
+      <div class="stat-label">UX Guidelines</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">50+</div>
+      <div class="stat-label">Design Styles</div>
+    </div>
+  </div>
+  <div class="mrgoonie-skills-row">
+    <span class="mrgoonie-pill">ui-ux-pro-max</span>
+    <span class="mrgoonie-pill">design-system</span>
+    <span class="mrgoonie-pill">brand</span>
+    <span class="mrgoonie-pill">ui-styling</span>
+    <span class="mrgoonie-pill">slides</span>
+    <span class="mrgoonie-pill">banner-design</span>
+    <span class="mrgoonie-pill">design</span>
+  </div>
+  <div class="info-card">
+    <span class="info-source">mrgoonie / nextlevelbuilder</span>
+    <h3>ui-ux-pro-max + 6 sub-skills</h3>
+    <p>A searchable design database: 161 color palettes, 57 font pairings, 99 UX rules, 25 chart types across 10 tech stacks. Priority-based rules from accessibility (#1) to charts (#10). Plus brand identity, design tokens, slides, and banner generation.</p>
+    <div class="scroll-hint">Scroll for next skill ↓</div>
+  </div>
+</section>
+
+<!-- ═══ SLIDE 7 — FRONTEND-DESIGN (Anthropic) ═══ -->
+<section class="slide slide-anthropic anthropic-info">
+  <div class="anthropic-bg-text">BOLD</div>
+  <div class="anthropic-content">
+    <div class="anthropic-eyebrow">Anthropic Official — 277K+ Installs</div>
+    <h2 class="anthropic-title">
+      Make it<br><span class="gradient-text">unforgettable.</span>
+    </h2>
+    <div class="creative-cards">
+      <div class="creative-card">
+        <h4>Brutally Minimal</h4>
+        <p>Restraint as design choice. Fewer elements, more intention. Every pixel earns its place.</p>
+      </div>
+      <div class="creative-card">
+        <h4>Retro-Futuristic</h4>
+        <p>CRT nostalgia meets modern performance. Amber terminals, scanlines, phosphor text.</p>
+      </div>
+      <div class="creative-card">
+        <h4>Organic Natural</h4>
+        <p>Earth tones, botanical textures, hand-drawn elements. Technology that feels alive.</p>
+      </div>
+      <div class="creative-card">
+        <h4>Maximalist Chaos</h4>
+        <p>Layer everything. Overlap, rotate, animate. Controlled disorder that demands attention.</p>
+      </div>
+    </div>
+  </div>
+  <div class="info-card">
+    <span class="info-source">Anthropic / Official Skill</span>
+    <h3>frontend-design</h3>
+    <p>Anthropic's most installed skill. Fights "distributional convergence" — AI always producing the same generic look. Forces a BOLD aesthetic direction before any code. "No design should be the same." The gradient-topped cards with rotation on hover demonstrate unexpected choices.</p>
+    <div class="scroll-hint">Scroll for next skill ↓</div>
+  </div>
+</section>
+
+<!-- ═══ SLIDE 8 — DESIGN ROUTER ═══ -->
+<section class="slide slide-router router-info">
+  <h2 class="router-title">You describe.<br>It routes.</h2>
+  <div class="routing-demo-grid">
+    <div class="route-card route-saas">
+      <div class="route-type">SaaS / Dashboard</div>
+      <h4>taste-skill</h4>
+      <div class="route-skill">→ Ethereal Glass vibe</div>
+    </div>
+    <div class="route-card route-luxury">
+      <div class="route-type">Portfolio / Agency</div>
+      <h4>soft-skill</h4>
+      <div class="route-skill">→ Editorial Luxury vibe</div>
+    </div>
+    <div class="route-card route-editorial">
+      <div class="route-type">Blog / Editorial</div>
+      <h4>minimalist-skill</h4>
+      <div class="route-skill">→ Notion / Linear feel</div>
+    </div>
+    <div class="route-card route-terminal">
+      <div class="route-type">DATA_DASHBOARD</div>
+      <h4>BRUTALIST</h4>
+      <div class="route-skill">→ CRT_TERMINAL_MODE</div>
+    </div>
+    <div class="route-card route-creative">
+      <div class="route-type">Creative / Art</div>
+      <h4>frontend-design</h4>
+      <div class="route-skill">→ Maximum creative freedom</div>
+    </div>
+    <div class="route-card route-mobile">
+      <div class="route-type">Mobile App / E-Commerce</div>
+      <h4>ui-ux-pro-max</h4>
+      <div class="route-skill">→ 10 stacks, 99 UX rules</div>
+    </div>
+  </div>
+  <div class="info-card">
+    <span class="info-source">Custom / Payos</span>
+    <h3>design-router</h3>
+    <p>The dispatcher. Each card above IS styled in the target skill's aesthetic. When you ask for a site, the router matches your project type + industry to the right skill combination. taste-skill always loads as baseline protection.</p>
+    <div class="scroll-hint">Scroll for next skill ↓</div>
+  </div>
+</section>
+
+<!-- ═══ SLIDE 9 — OUTPUT-SKILL + STITCH ═══ -->
+<section class="slide slide-output output-info">
+  <h2 class="output-title">Zero lazy output.<br>Zero truncation.</h2>
+  <div class="code-blocks">
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-dot red"></span>
+        <span class="code-dot red"></span>
+        output-skill — Banned Patterns
+      </div>
+      <div class="code-body">
+        <span class="banned">// TODO: implement later</span><br>
+        <span class="banned">/* ... rest of code ... */</span><br>
+        <span class="banned">// See above for similar</span><br>
+        <span class="banned">{/* Add remaining items */}</span><br>
+        <span class="banned">// Placeholder content</span><br>
+        <span class="banned">Lorem ipsum dolor sit</span><br>
+        <br>
+        <span class="comment">// All of these = instant fail.</span><br>
+        <span class="comment">// Every line must be real,</span><br>
+        <span class="comment">// production-ready code.</span>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-dot green"></span>
+        <span class="code-dot green"></span>
+        stitch-skill — DESIGN.md Output
+      </div>
+      <div class="code-body">
+        <span class="keyword"># Design System:</span> Project<br>
+        <br>
+        <span class="keyword">## 1. Atmosphere</span><br>
+        <span class="string">Variance: 8, Motion: 6</span><br>
+        <br>
+        <span class="keyword">## 2. Color Palette</span><br>
+        <span class="string">Canvas White (#F9FAFB)</span><br>
+        <span class="string">Charcoal Ink (#18181B)</span><br>
+        <br>
+        <span class="keyword">## 3. Anti-Patterns</span><br>
+        <span class="enforced">No Inter, No #000, No neon</span><br>
+        <br>
+        <span class="comment">→ For Google Stitch AI</span>
+      </div>
+    </div>
+  </div>
+  <div class="info-card">
+    <span class="info-source">Leonxlnx / output-skill + stitch-skill</span>
+    <h3>output-skill + stitch-skill</h3>
+    <p>output-skill bans all lazy patterns (TODO, ellipsis, lorem ipsum). If token-limited, uses [PAUSED] breakpoints instead of compression. stitch-skill generates structured DESIGN.md files that Google Stitch AI can interpret to produce premium screens.</p>
+    <div class="scroll-hint">Scroll for finale ↓</div>
+  </div>
+</section>
+
+<!-- ═══ SLIDE 10 — FINALE ═══ -->
+<section class="slide slide-finale">
+  <h2 class="finale-title">22 skills.<br>One <em>install</em>.</h2>
+  <div class="finale-install">npx skills add https://github.com/Payoss/UIUX-high-taste-skill</div>
+  <div class="finale-credits">
     <a href="https://github.com/Leonxlnx/taste-skill" target="_blank">Leonxlnx</a>
     <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank">mrgoonie</a>
     <a href="https://github.com/anthropics/skills" target="_blank">Anthropic</a>
+    <a href="https://github.com/Payoss/UIUX-high-taste-skill" target="_blank">Payoss</a>
   </div>
-</footer>
+</section>
 
 </body>
 </html>
