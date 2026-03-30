@@ -11,9 +11,9 @@ npx skills add https://github.com/Payoss/UIUX-high-taste-skill
 
 Or copy individual `skills/*/SKILL.md` into your `.claude/skills/` directory.
 
-## Skills (14)
+## Skills (21)
 
-### Design Systems (Leonxlnx)
+### Leonxlnx — Anti-Slop Design System (7 skills)
 
 | Skill | Description |
 |-------|-------------|
@@ -27,7 +27,21 @@ Or copy individual `skills/*/SKILL.md` into your `.claude/skills/` directory.
 
 > Credits: [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill)
 
-### Official Anthropic Design Skills
+### mrgoonie — UI/UX Pro Max (7 skills)
+
+| Skill | Description |
+|-------|-------------|
+| **mrgoonie-ui-ux-pro-max** | Complete UI/UX pro max design skill — the core |
+| **mrgoonie-design** | Design routing: logos, icons, slides, social, banners, CIP |
+| **mrgoonie-design-system** | Token architecture, component specs, Tailwind integration |
+| **mrgoonie-ui-styling** | shadcn + Tailwind: theming, accessibility, responsive, canvas |
+| **mrgoonie-brand** | Brand guidelines: voice, visual identity, typography, color palettes |
+| **mrgoonie-slides** | Slide presentations: layouts, copywriting formulas, HTML templates |
+| **mrgoonie-banner-design** | Banner design: sizes, styles, ad formats |
+
+> Credits: [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) by mrgoonie
+
+### Anthropic Official (4 skills)
 
 | Skill | Description |
 |-------|-------------|
@@ -38,7 +52,7 @@ Or copy individual `skills/*/SKILL.md` into your `.claude/skills/` directory.
 
 > Credits: [anthropics/skills](https://github.com/anthropics/skills)
 
-### Community Design Skills
+### Community (3 skills)
 
 | Skill | Description | Credits |
 |-------|-------------|---------|
@@ -49,28 +63,6 @@ Or copy individual `skills/*/SKILL.md` into your `.claude/skills/` directory.
 ## Research
 
 - `research/laziness/` — Study on LLM laziness: root causes, empirical findings, remediation strategies
-
-## Structure
-
-```
-skills/
-  taste-skill/          # Core anti-slop design system
-  redesign-skill/       # Upgrade existing projects
-  soft-skill/           # Luxury aesthetic
-  minimalist-skill/     # Editorial minimalism
-  brutalist-skill/      # Raw industrial (Beta)
-  stitch-skill/         # Google Stitch protocol
-  output-skill/         # Anti-lazy output enforcement
-  frontend-design/      # Anthropic official
-  canvas-design/        # Visual art + fonts
-  theme-factory/        # 10 themes
-  algorithmic-art/      # Generative art
-  frontend-slides/      # HTML presentations
-  d3js-viz/             # D3.js visualizations
-  web-asset-generator/  # Web assets
-research/               # LLM laziness research
-examples/               # Before/after examples
-```
 
 ## Philosophy
 
