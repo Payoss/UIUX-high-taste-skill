@@ -6,1106 +6,712 @@
 <title>UIUX High Taste — Visual Showcase</title>
 <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500;700&family=Satoshi:wght@400;500;700;900&family=Outfit:wght@400;500;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:wght@400;700&family=Archivo+Black&display=swap" rel="stylesheet">
 <style>
-  /* ═══ RESET ═══ */
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
-  body{-webkit-font-smoothing:antialiased;overflow-x:hidden}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{-webkit-font-smoothing:antialiased;overflow-x:hidden;background:#050508}
+.slide{min-height:100dvh;position:relative;overflow:hidden}
 
-  /* ═══ SLIDE SYSTEM ═══ */
-  .slide{
-    min-height:100dvh;
-    scroll-snap-align:start;
-    position:relative;
-    overflow:hidden;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-  }
+/* ═══ PROGRESS BAR ═══ */
+.progress{position:fixed;top:0;left:0;height:2px;background:#10b981;z-index:9999;width:0%;transition:width 0.3s}
 
-  /* ═══ INFO CARD — "What am I looking at?" ═══ */
-  .info-card{
-    position:absolute;
-    bottom:2.5rem;
-    left:2.5rem;
-    max-width:420px;
-    padding:1.5rem;
-    border-radius:16px;
-    backdrop-filter:blur(24px) saturate(180%);
-    z-index:50;
-    transition:opacity 0.4s ease;
-  }
-  .info-card .info-source{
-    font-family:'Geist Mono',monospace;
-    font-size:0.5625rem;
-    text-transform:uppercase;
-    letter-spacing:0.12em;
-    margin-bottom:0.5rem;
-    display:inline-block;
-    padding:0.2rem 0.5rem;
-    border-radius:4px;
-  }
-  .info-card h3{
-    font-family:'Cabinet Grotesk',sans-serif;
-    font-size:1.25rem;
-    font-weight:800;
-    letter-spacing:-0.02em;
-    margin-bottom:0.5rem;
-  }
-  .info-card p{
-    font-family:'Satoshi',sans-serif;
-    font-size:0.8125rem;
-    line-height:1.65;
-    opacity:0.85;
-  }
-  .info-card .scroll-hint{
-    font-family:'Geist Mono',monospace;
-    font-size:0.5625rem;
-    text-transform:uppercase;
-    letter-spacing:0.1em;
-    margin-top:1rem;
-    opacity:0.4;
-  }
+/* ═══ SLIDE COUNTER ═══ */
+.slide-counter{
+  position:fixed;top:50%;right:2rem;transform:translateY(-50%);z-index:100;
+  display:flex;flex-direction:column;gap:0.5rem;
+}
+.slide-counter .dot{
+  width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.15);
+  transition:all 0.4s cubic-bezier(0.16,1,0.3,1);cursor:pointer;
+}
+.slide-counter .dot.active{background:#10b981;transform:scale(1.5)}
 
-  /* ═══ ANIMATIONS ═══ */
-  @keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
-  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.85)}}
-  @keyframes scanline{0%{top:-100%}100%{top:100%}}
-  @keyframes typewriter{from{width:0}to{width:100%}}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-  @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-  @keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-5%,-10%)}30%{transform:translate(3%,-15%)}50%{transform:translate(12%,9%)}70%{transform:translate(9%,4%)}90%{transform:translate(-1%,7%)}}
-  @keyframes spotlight{0%{opacity:0;transform:scale(0.95)}100%{opacity:1;transform:scale(1)}}
-  @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-  @keyframes rotateIn{from{opacity:0;transform:rotate(-3deg) scale(0.95)}to{opacity:1;transform:rotate(0) scale(1)}}
-  @keyframes slideRight{from{transform:translateX(-100%)}to{transform:translateX(0)}}
-  @keyframes countUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+/* ═══ REVEAL SYSTEM ═══ */
+.reveal{opacity:0;transform:translateY(50px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-80px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(80px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+.reveal-scale{opacity:0;transform:scale(0.85);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal-scale.visible{opacity:1;transform:scale(1)}
+.reveal-rotate{opacity:0;transform:rotate(-5deg) scale(0.9);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+.reveal-rotate.visible{opacity:1;transform:rotate(0) scale(1)}
+.stagger{transition-delay:calc(var(--i) * 120ms) !important}
 
-  /* ═══ RESPONSIVE ═══ */
-  @media(max-width:768px){
-    .slide{padding:1.5rem !important}
-    .info-card{bottom:1rem;left:1rem;right:1rem;max-width:none}
-    .bento-grid{grid-template-columns:1fr !important}
-    .split-layout{flex-direction:column !important}
-    .hero-title-taste{font-size:3rem !important}
-    .hero-title-soft{font-size:2.5rem !important}
-    .brutalist-title{font-size:4rem !important}
-    .swiss-grid{grid-template-columns:1fr !important}
-    .routing-demo-grid{grid-template-columns:1fr !important}
-  }
+/* ═══ INFO CARD ═══ */
+.info-card{
+  position:absolute;bottom:2rem;left:2rem;max-width:380px;padding:1.25rem;
+  border-radius:14px;backdrop-filter:blur(24px) saturate(180%);z-index:50;
+  opacity:0;transform:translateY(20px);transition:all 0.6s cubic-bezier(0.16,1,0.3,1) 0.8s;
+}
+.slide.in-view .info-card{opacity:1;transform:translateY(0)}
+.info-card .tag{
+  font-family:'Geist Mono',monospace;font-size:0.5625rem;text-transform:uppercase;
+  letter-spacing:0.1em;padding:0.2rem 0.5rem;border-radius:4px;display:inline-block;margin-bottom:0.4rem;
+}
+.info-card h3{font-family:'Cabinet Grotesk',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.35rem}
+.info-card p{font-family:'Satoshi',sans-serif;font-size:0.75rem;line-height:1.6;opacity:0.8}
 
-  /* ═══════════════════════════════════════════════
-     SLIDE 0 — INTRO
-     ═══════════════════════════════════════════════ */
-  .slide-intro{
-    background:#050508;
-    color:#f0f0f5;
-    font-family:'Cabinet Grotesk',sans-serif;
-    align-items:center;
-    text-align:center;
-    padding:4rem;
-  }
-  .slide-intro .intro-eyebrow{
-    font-family:'Geist Mono',monospace;
-    font-size:0.625rem;
-    text-transform:uppercase;
-    letter-spacing:0.2em;
-    color:#10b981;
-    margin-bottom:2rem;
-    animation:fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.2s both;
-  }
-  .slide-intro h1{
-    font-size:clamp(2.5rem,7vw,5.5rem);
-    font-weight:900;
-    line-height:0.95;
-    letter-spacing:-0.04em;
-    max-width:800px;
-    animation:fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.4s both;
-  }
-  .slide-intro h1 em{
-    font-family:'Instrument Serif',serif;
-    font-style:italic;
-    font-weight:400;
-    color:#10b981;
-  }
-  .slide-intro .intro-sub{
-    font-family:'Satoshi',sans-serif;
-    font-size:1.125rem;
-    color:#71717a;
-    max-width:500px;
-    margin-top:2rem;
-    line-height:1.6;
-    animation:fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.6s both;
-  }
-  .slide-intro .scroll-down{
-    margin-top:4rem;
-    font-family:'Geist Mono',monospace;
-    font-size:0.625rem;
-    text-transform:uppercase;
-    letter-spacing:0.15em;
-    color:#52525b;
-    animation:fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.8s both;
-  }
-  .slide-intro .scroll-arrow{
-    display:block;
-    margin:0.75rem auto 0;
-    width:1px;
-    height:40px;
-    background:linear-gradient(to bottom,#52525b,transparent);
-    animation:pulse 2s ease-in-out infinite;
-  }
+@media(max-width:768px){
+  .slide{padding:1.5rem !important}
+  .info-card{bottom:1rem;left:1rem;right:1rem;max-width:none}
+  .slide-counter{display:none}
+}
 
+/* ═══════════════════════════════════════════════
+   SLIDE 0 — INTRO (Cinematic)
+   ═══════════════════════════════════════════════ */
+.slide-intro{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:4rem;color:#f0f0f5;
+}
+.intro-line{
+  display:block;overflow:hidden;
+}
+.intro-line span{
+  display:inline-block;font-family:'Cabinet Grotesk',sans-serif;
+  font-size:clamp(3rem,9vw,7rem);font-weight:900;line-height:0.95;letter-spacing:-0.05em;
+  transform:translateY(110%);transition:transform 1s cubic-bezier(0.16,1,0.3,1);
+}
+.slide-intro.in-view .intro-line span{transform:translateY(0)}
+.slide-intro.in-view .intro-line:nth-child(2) span{transition-delay:0.15s}
+.slide-intro.in-view .intro-line:nth-child(3) span{transition-delay:0.3s}
+.intro-line em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:#10b981}
+.intro-sub{
+  font-family:'Satoshi',sans-serif;font-size:1rem;color:#52525b;
+  margin-top:2rem;opacity:0;transition:opacity 1s 0.6s;
+}
+.slide-intro.in-view .intro-sub{opacity:1}
+.intro-scroll{
+  position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);
+  width:20px;height:32px;border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;
+}
+.intro-scroll::after{
+  content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);
+  width:3px;height:6px;background:#10b981;border-radius:3px;
+  animation:scrollBounce 1.8s ease-in-out infinite;
+}
+@keyframes scrollBounce{0%,100%{transform:translateX(-50%) translateY(0);opacity:1}50%{transform:translateX(-50%) translateY(10px);opacity:0.3}}
 
-  /* ═══════════════════════════════════════════════
-     SLIDE 1 — TASTE-SKILL (Leon)
-     Dark, emerald accent, grain, spring animations
-     ═══════════════════════════════════════════════ */
-  .slide-taste{
-    background:#050508;
-    color:#f0f0f5;
-    padding:4rem;
-  }
-  /* Grain overlay */
-  .slide-taste::after{
-    content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0.03;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  /* Ambient orbs */
-  .taste-orb-1{
-    position:absolute;width:500px;height:500px;border-radius:50%;
-    background:radial-gradient(circle,rgba(16,185,129,0.1) 0%,transparent 70%);
-    top:10%;right:-5%;filter:blur(80px);animation:float 8s ease-in-out infinite;
-  }
-  .taste-orb-2{
-    position:absolute;width:350px;height:350px;border-radius:50%;
-    background:radial-gradient(circle,rgba(59,130,246,0.07) 0%,transparent 70%);
-    bottom:15%;left:-3%;filter:blur(60px);animation:float 10s ease-in-out infinite reverse;
-  }
-  .hero-title-taste{
-    font-family:'Cabinet Grotesk',sans-serif;
-    font-size:clamp(3rem,8vw,6rem);font-weight:900;
-    line-height:0.92;letter-spacing:-0.04em;
-    max-width:700px;position:relative;z-index:2;
-  }
-  .taste-cards{
-    display:flex;gap:1rem;margin-top:3rem;position:relative;z-index:2;
-    flex-wrap:wrap;
-  }
-  /* Double-bezel card from soft-skill applied with taste-skill colors */
-  .taste-demo-card{
-    background:#0a0a0f;border:1px solid rgba(255,255,255,0.06);
-    border-radius:1.5rem;padding:2px;flex:1;min-width:200px;
-    transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
-  }
-  .taste-demo-card:hover{border-color:rgba(255,255,255,0.12);transform:translateY(-3px);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)}
-  .taste-demo-card-inner{
-    background:#111118;border-radius:calc(1.5rem - 2px);padding:1.5rem;
-    box-shadow:inset 0 1px 1px rgba(255,255,255,0.04);
-    position:relative;overflow:hidden;
-  }
-  .taste-demo-card-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)}
-  .taste-demo-card .card-num{font-family:'Geist Mono',monospace;font-size:0.5625rem;color:#10b981;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem}
-  .taste-demo-card h4{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:1rem;letter-spacing:-0.01em;margin-bottom:0.5rem}
-  .taste-demo-card p{font-size:0.8125rem;color:#71717a;line-height:1.5}
-  .taste-accent{color:#10b981}
-  .taste-info .info-card{background:rgba(5,5,8,0.85);border:1px solid rgba(255,255,255,0.06);color:#f0f0f5}
-  .taste-info .info-source{background:rgba(16,185,129,0.15);color:#10b981}
+/* ═══════════════════════════════════════════════
+   SLIDE 1 — TASTE-SKILL
+   Spotlight border cards + staggered cascade
+   ═══════════════════════════════════════════════ */
+.slide-taste{padding:5rem 4rem;color:#f0f0f5}
+.slide-taste::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:1;opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.taste-orb{position:absolute;border-radius:50%;filter:blur(80px);z-index:0;transition:transform 6s ease}
+.taste-orb-1{width:500px;height:500px;background:radial-gradient(circle,rgba(16,185,129,0.12) 0%,transparent 70%);top:10%;right:-5%}
+.taste-orb-2{width:350px;height:350px;background:radial-gradient(circle,rgba(59,130,246,0.08) 0%,transparent 70%);bottom:10%;left:-3%}
+.taste-title{
+  font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(2.5rem,7vw,5.5rem);
+  font-weight:900;line-height:0.92;letter-spacing:-0.04em;position:relative;z-index:5;
+}
+.taste-accent{color:#10b981}
+.taste-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;
+  margin-top:3rem;position:relative;z-index:5;max-width:1100px;
+}
+/* SPOTLIGHT BORDER — the card border glows where your cursor is */
+.spotlight-card{
+  position:relative;border-radius:16px;overflow:hidden;
+  background:#0a0a0f;cursor:default;
+}
+.spotlight-card::before{
+  content:'';position:absolute;inset:-1px;border-radius:17px;
+  background:radial-gradient(600px circle at var(--x,50%) var(--y,50%),rgba(16,185,129,0.25),transparent 40%);
+  z-index:0;opacity:0;transition:opacity 0.4s;
+}
+.spotlight-card:hover::before{opacity:1}
+.spotlight-card-inner{
+  position:relative;z-index:1;background:#111118;margin:1px;
+  border-radius:15px;padding:1.5rem;min-height:200px;
+  display:flex;flex-direction:column;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.04);
+}
+.spotlight-card .sc-label{font-family:'Geist Mono',monospace;font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.1em;color:#10b981;margin-bottom:auto}
+.spotlight-card h4{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-0.01em;margin-bottom:0.35rem}
+.spotlight-card p{font-size:0.75rem;color:#71717a;line-height:1.55;font-family:'Satoshi',sans-serif}
+.taste-info .info-card{background:rgba(5,5,8,0.85);border:1px solid rgba(255,255,255,0.06);color:#f0f0f5}
+.taste-info .tag{background:rgba(16,185,129,0.15);color:#10b981}
 
-  /* ═══════════════════════════════════════════════
-     SLIDE 2 — SOFT-SKILL (Leon)
-     Warm cream, editorial serif, $150k agency
-     ═══════════════════════════════════════════════ */
-  .slide-soft{
-    background:#FDFBF7;
-    color:#1a1a1a;
-    padding:4rem;
-  }
-  .soft-noise{
-    position:absolute;inset:0;pointer-events:none;
-    opacity:0.03;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  .hero-title-soft{
-    font-family:'Playfair Display',serif;
-    font-size:clamp(2.5rem,6vw,5rem);font-weight:700;
-    line-height:1.05;letter-spacing:-0.02em;
-    max-width:650px;position:relative;z-index:2;
-  }
-  .hero-title-soft .italic-accent{font-style:italic;color:#8B7355}
-  .soft-subtitle{
-    font-family:'Satoshi',sans-serif;font-size:1rem;
-    color:#8B8680;max-width:420px;line-height:1.7;
-    margin-top:1.5rem;position:relative;z-index:2;
-  }
-  /* Bento with double-bezel */
-  .soft-bento{
-    display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:200px 200px;
-    gap:0.75rem;margin-top:3rem;position:relative;z-index:2;
-    max-width:900px;
-  }
-  .soft-cell{
-    background:#F5F2ED;border:1px solid rgba(0,0,0,0.05);
-    border-radius:1.25rem;padding:2px;
-  }
-  .soft-cell-inner{
-    background:#FDFBF7;border-radius:calc(1.25rem - 2px);
-    padding:1.5rem;height:100%;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.8);
-    display:flex;flex-direction:column;justify-content:flex-end;
-  }
-  .soft-cell.span-2{grid-row:span 2}
-  .soft-cell .cell-label{font-family:'Geist Mono',monospace;font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.1em;color:#B5AFA7;margin-bottom:0.5rem}
-  .soft-cell .cell-value{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;color:#1a1a1a;letter-spacing:-0.02em}
-  .soft-cell .cell-desc{font-family:'Satoshi',sans-serif;font-size:0.75rem;color:#8B8680;margin-top:0.25rem;line-height:1.5}
-  .soft-info .info-card{background:rgba(253,251,247,0.9);border:1px solid rgba(0,0,0,0.06);color:#1a1a1a}
-  .soft-info .info-source{background:rgba(139,115,85,0.12);color:#8B7355}
-  .soft-info p{color:#5a5650}
+/* ═══════════════════════════════════════════════
+   SLIDE 2 — SOFT-SKILL
+   Parallax bento + cream + hover lift
+   ═══════════════════════════════════════════════ */
+.slide-soft{background:#FDFBF7;color:#1a1a1a;padding:5rem 4rem}
+.slide-soft .noise-overlay{position:absolute;inset:0;pointer-events:none;opacity:0.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.soft-layout{display:flex;gap:4rem;align-items:center;position:relative;z-index:2;max-width:1100px}
+.soft-left{flex:1}
+.soft-right{flex:1.2}
+.soft-title{
+  font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4rem);
+  font-weight:700;line-height:1.05;letter-spacing:-0.02em;
+}
+.soft-italic{font-style:italic;color:#8B7355}
+.soft-sub{font-family:'Satoshi',sans-serif;font-size:0.9375rem;color:#8B8680;line-height:1.7;margin-top:1.25rem;max-width:360px}
+/* Parallax bento cells */
+.soft-bento{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:180px 180px 180px;gap:0.75rem}
+.soft-cell{
+  background:#F5F2ED;border:1px solid rgba(0,0,0,0.04);border-radius:1.25rem;padding:2px;
+  transition:transform 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.soft-cell:hover{transform:translateY(-6px) scale(1.02)}
+.soft-cell-inner{
+  background:#FDFBF7;border-radius:calc(1.25rem - 2px);padding:1.25rem;height:100%;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.8);
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.soft-cell.tall{grid-row:span 2}
+.soft-cell .label{font-family:'Geist Mono',monospace;font-size:0.5rem;text-transform:uppercase;letter-spacing:0.12em;color:#B5AFA7;margin-bottom:0.35rem}
+.soft-cell .value{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;letter-spacing:-0.02em}
+.soft-cell .desc{font-family:'Satoshi',sans-serif;font-size:0.6875rem;color:#8B8680;margin-top:0.2rem;line-height:1.5}
+.soft-info .info-card{background:rgba(253,251,247,0.92);border:1px solid rgba(0,0,0,0.06);color:#1a1a1a}
+.soft-info .tag{background:rgba(139,115,85,0.12);color:#8B7355}
+.soft-info p{color:#5a5650}
+@media(max-width:768px){.soft-layout{flex-direction:column;gap:2rem}.soft-bento{grid-template-columns:1fr}.soft-cell.tall{grid-row:span 1}}
 
-  /* ═══════════════════════════════════════════════
-     SLIDE 3 — MINIMALIST-SKILL (Leon)
-     Notion/Linear, warm white, bento, 1px borders
-     ═══════════════════════════════════════════════ */
-  .slide-minimal{
-    background:#FFFFFF;
-    color:#2F3437;
-    padding:4rem;
-  }
-  .minimal-header{
-    font-family:'Satoshi',sans-serif;font-weight:700;
-    font-size:clamp(1.75rem,3.5vw,2.5rem);
-    letter-spacing:-0.02em;color:#111111;
-    max-width:500px;line-height:1.15;
-  }
-  .minimal-sub{
-    font-family:'Satoshi',sans-serif;font-size:0.9375rem;
-    color:#787774;line-height:1.65;max-width:400px;margin-top:1rem;
-  }
-  .bento-grid{
-    display:grid;grid-template-columns:1fr 1fr 1fr;
-    gap:0;margin-top:2.5rem;
-    border:1px solid #EAEAEA;border-radius:12px;overflow:hidden;
-    max-width:900px;
-  }
-  .bento-cell{
-    padding:1.75rem;border-right:1px solid #EAEAEA;border-bottom:1px solid #EAEAEA;
-    background:#FFFFFF;transition:background 0.2s;
-  }
-  .bento-cell:hover{background:#F9F9F8}
-  .bento-cell:nth-child(3n){border-right:none}
-  .bento-cell:nth-last-child(-n+3){border-bottom:none}
-  .bento-cell .bento-icon{
-    width:32px;height:32px;border-radius:6px;margin-bottom:1rem;
-    display:flex;align-items:center;justify-content:center;
-    font-size:0.875rem;
-  }
-  .bento-icon.pastel-blue{background:#E1F3FE;color:#1F6C9F}
-  .bento-icon.pastel-green{background:#EDF3EC;color:#346538}
-  .bento-icon.pastel-red{background:#FDEBEC;color:#9F2F2D}
-  .bento-icon.pastel-yellow{background:#FBF3DB;color:#956400}
-  .bento-icon.pastel-purple{background:#F0EAFF;color:#6B4FAA}
-  .bento-icon.pastel-orange{background:#FFF0E0;color:#A85C00}
-  .bento-cell h4{font-family:'Satoshi',sans-serif;font-weight:700;font-size:0.875rem;color:#111111;margin-bottom:0.375rem}
-  .bento-cell p{font-family:'Satoshi',sans-serif;font-size:0.75rem;color:#787774;line-height:1.55}
-  .minimal-info .info-card{background:rgba(255,255,255,0.95);border:1px solid #EAEAEA;color:#2F3437}
-  .minimal-info .info-source{background:#EDF3EC;color:#346538}
-  .minimal-info p{color:#787774}
+/* ═══════════════════════════════════════════════
+   SLIDE 3 — MINIMALIST
+   Typewriter + Notion bento hover
+   ═══════════════════════════════════════════════ */
+.slide-minimal{background:#fff;color:#2F3437;padding:5rem 4rem}
+.minimal-title{
+  font-family:'Satoshi',sans-serif;font-weight:700;
+  font-size:clamp(1.75rem,3.5vw,2.5rem);letter-spacing:-0.02em;color:#111;
+}
+/* Typewriter line */
+.typewriter{
+  font-family:'Geist Mono',monospace;font-size:0.75rem;color:#787774;
+  margin-top:0.75rem;overflow:hidden;white-space:nowrap;
+  border-right:2px solid #111;width:0;
+}
+.slide-minimal.in-view .typewriter{animation:typeWrite 2s steps(40) 0.5s forwards,blinkCaret 0.8s step-end infinite}
+@keyframes typeWrite{to{width:38ch}}
+@keyframes blinkCaret{50%{border-color:transparent}}
+.notion-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+  margin-top:2.5rem;border:1px solid #EAEAEA;border-radius:10px;overflow:hidden;max-width:900px;
+}
+.notion-cell{
+  padding:1.75rem;border-right:1px solid #EAEAEA;border-bottom:1px solid #EAEAEA;
+  transition:all 0.35s cubic-bezier(0.16,1,0.3,1);position:relative;overflow:hidden;
+}
+.notion-cell::after{
+  content:'';position:absolute;bottom:0;left:0;width:0;height:2px;
+  background:#111;transition:width 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.notion-cell:hover{background:#F9F9F8}
+.notion-cell:hover::after{width:100%}
+.notion-cell:nth-child(3n){border-right:none}
+.notion-cell:nth-last-child(-n+3){border-bottom:none}
+.notion-cell .icon{
+  width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;margin-bottom:0.75rem;font-family:'Geist Mono',monospace;font-weight:700;
+}
+.nc-blue{background:#E1F3FE;color:#1F6C9F}
+.nc-green{background:#EDF3EC;color:#346538}
+.nc-red{background:#FDEBEC;color:#9F2F2D}
+.nc-yellow{background:#FBF3DB;color:#956400}
+.nc-purple{background:#F0EAFF;color:#6B4FAA}
+.nc-orange{background:#FFF0E0;color:#A85C00}
+.notion-cell h4{font-family:'Satoshi',sans-serif;font-weight:700;font-size:0.8125rem;color:#111;margin-bottom:0.25rem}
+.notion-cell p{font-family:'Satoshi',sans-serif;font-size:0.6875rem;color:#787774;line-height:1.5}
+.minimal-info .info-card{background:rgba(255,255,255,0.95);border:1px solid #EAEAEA;color:#2F3437}
+.minimal-info .tag{background:#EDF3EC;color:#346538}
+.minimal-info p{color:#787774}
+@media(max-width:768px){.notion-grid{grid-template-columns:1fr}.notion-cell{border-right:none !important}}
 
-  /* ═══════════════════════════════════════════════
-     SLIDE 4 — BRUTALIST-SKILL (Leon)
-     CRT Terminal mode — dark, monospace, scanlines
-     ═══════════════════════════════════════════════ */
-  .slide-brutalist{
-    background:#0a0a0a;
-    color:#00ff41;
-    font-family:'Space Mono',monospace;
-    padding:4rem;
-  }
-  /* Scanline effect */
-  .scanlines{
-    position:absolute;inset:0;pointer-events:none;z-index:10;
-    background:repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0,0,0,0.15) 2px,
-      rgba(0,0,0,0.15) 4px
-    );
-  }
-  /* Phosphor glow */
-  .slide-brutalist::before{
-    content:'';position:absolute;inset:0;pointer-events:none;
-    box-shadow:inset 0 0 150px rgba(0,255,65,0.03);
-    z-index:5;
-  }
-  .brutalist-title{
-    font-family:'Archivo Black',sans-serif;
-    font-size:clamp(4rem,12vw,10rem);
-    font-weight:900;line-height:0.85;
-    letter-spacing:-0.05em;
-    text-transform:uppercase;
-    color:#e8e8e8;
-    position:relative;z-index:20;
-  }
-  .brutalist-title .red{color:#ff0000}
-  .brutalist-meta{
-    font-family:'Space Mono',monospace;
-    font-size:0.6875rem;letter-spacing:0.08em;
-    text-transform:uppercase;color:#00ff41;
-    margin-top:2rem;position:relative;z-index:20;
-    opacity:0.7;
-  }
-  .swiss-grid{
-    display:grid;grid-template-columns:repeat(4,1fr);
-    gap:0;margin-top:2rem;position:relative;z-index:20;
-    border:1px solid rgba(0,255,65,0.2);max-width:900px;
-  }
-  .swiss-cell{
-    border-right:1px solid rgba(0,255,65,0.15);
-    border-bottom:1px solid rgba(0,255,65,0.15);
-    padding:1.25rem;
-    transition:background 0.15s;
-  }
-  .swiss-cell:hover{background:rgba(0,255,65,0.03)}
-  .swiss-cell:nth-child(4n){border-right:none}
-  .swiss-cell:nth-last-child(-n+4){border-bottom:none}
-  .swiss-cell .cell-id{font-size:0.5rem;color:rgba(0,255,65,0.3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem}
-  .swiss-cell .cell-val{font-family:'Archivo Black',sans-serif;font-size:1.5rem;color:#e8e8e8;letter-spacing:-0.03em}
-  .swiss-cell .cell-unit{font-size:0.5625rem;color:rgba(0,255,65,0.5);margin-top:0.25rem}
-  .cursor-blink{display:inline-block;width:8px;height:1.25em;background:#00ff41;animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:4px}
-  .brutalist-info .info-card{background:rgba(10,10,10,0.92);border:1px solid rgba(0,255,65,0.2);color:#00ff41}
-  .brutalist-info .info-source{background:rgba(255,0,0,0.15);color:#ff0000}
-  .brutalist-info h3{color:#e8e8e8}
-  .brutalist-info p{color:rgba(0,255,65,0.7)}
+/* ═══════════════════════════════════════════════
+   SLIDE 4 — BRUTALIST
+   Scanlines, CRT glow, counter animation, glitch
+   ═══════════════════════════════════════════════ */
+.slide-brutalist{background:#0a0a0a;color:#00ff41;font-family:'Space Mono',monospace;padding:5rem 4rem}
+.brutalist-scanlines{position:absolute;inset:0;pointer-events:none;z-index:2;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.15) 2px,rgba(0,0,0,0.15) 4px)}
+.slide-brutalist::before{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 150px rgba(0,255,65,0.04);z-index:1}
+.brutalist-title{
+  font-family:'Archivo Black',sans-serif;font-size:clamp(5rem,15vw,12rem);
+  font-weight:900;line-height:0.8;letter-spacing:-0.06em;text-transform:uppercase;
+  color:#e8e8e8;position:relative;z-index:5;
+}
+.brutalist-title .glitch{
+  position:relative;display:inline-block;
+}
+.brutalist-title .glitch::before,.brutalist-title .glitch::after{
+  content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;
+}
+.brutalist-title .glitch::before{color:#ff0000;animation:glitch1 3s infinite;clip-path:inset(0 0 65% 0)}
+.brutalist-title .glitch::after{color:#00ff41;animation:glitch2 3s infinite;clip-path:inset(65% 0 0 0)}
+@keyframes glitch1{0%,100%{transform:translate(0)}20%{transform:translate(-3px,2px)}40%{transform:translate(3px,-1px)}60%{transform:translate(-1px,1px)}}
+@keyframes glitch2{0%,100%{transform:translate(0)}25%{transform:translate(2px,-2px)}50%{transform:translate(-2px,1px)}75%{transform:translate(1px,-1px)}}
+.crt-meta{
+  font-size:0.6875rem;letter-spacing:0.08em;text-transform:uppercase;
+  color:#00ff41;margin-top:1.5rem;position:relative;z-index:5;opacity:0.6;
+}
+.crt-cursor{display:inline-block;width:8px;height:1em;background:#00ff41;animation:blink 0.8s step-end infinite;vertical-align:text-bottom;margin-left:3px}
+@keyframes blink{50%{opacity:0}}
+.crt-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:2rem;
+  position:relative;z-index:5;border:1px solid rgba(0,255,65,0.15);max-width:900px;
+}
+.crt-cell{border-right:1px solid rgba(0,255,65,0.12);border-bottom:1px solid rgba(0,255,65,0.12);padding:1.25rem;transition:all 0.2s}
+.crt-cell:hover{background:rgba(0,255,65,0.04);box-shadow:0 0 20px rgba(0,255,65,0.05)}
+.crt-cell:nth-child(4n){border-right:none}
+.crt-cell:nth-last-child(-n+4){border-bottom:none}
+.crt-cell .id{font-size:0.5rem;color:rgba(0,255,65,0.25);letter-spacing:0.15em;margin-bottom:0.4rem}
+/* Counter animation */
+.crt-cell .counter{font-family:'Archivo Black',sans-serif;font-size:1.75rem;color:#e8e8e8;letter-spacing:-0.03em}
+.crt-cell .unit{font-size:0.5rem;color:rgba(0,255,65,0.4);margin-top:0.15rem}
+.brutalist-info .info-card{background:rgba(10,10,10,0.92);border:1px solid rgba(0,255,65,0.15);color:#00ff41}
+.brutalist-info .tag{background:rgba(255,0,0,0.15);color:#ff0000}
+.brutalist-info h3{color:#e8e8e8}
+.brutalist-info p{color:rgba(0,255,65,0.65)}
+@media(max-width:768px){.crt-grid{grid-template-columns:1fr 1fr}}
 
-  /* ═══════════════════════════════════════════════
-     SLIDE 5 — REDESIGN-SKILL (Leon)
-     Before/After split screen
-     ═══════════════════════════════════════════════ */
-  .slide-redesign{
-    background:#111118;
-    color:#f0f0f5;
-    padding:4rem;
-  }
-  .split-layout{
-    display:flex;gap:1.5rem;margin-top:2rem;
-    max-width:1100px;position:relative;z-index:2;
-  }
-  .split-panel{flex:1;border-radius:1.25rem;overflow:hidden;padding:2rem;min-height:380px;display:flex;flex-direction:column}
-  /* BEFORE — generic AI slop */
-  .panel-before{
-    background:#f5f5f5;color:#333;
-    font-family:Inter,Arial,sans-serif;
-    border:2px dashed #e53e3e;
-  }
-  .panel-before .badge{background:#e53e3e;color:#fff;font-size:0.6875rem;font-weight:700;padding:0.25rem 0.75rem;border-radius:100px;width:fit-content;margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:0.05em}
-  .panel-before h4{font-family:Inter,sans-serif;font-size:1.5rem;font-weight:700;color:#333;margin-bottom:0.75rem}
-  .panel-before .slop-card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:1rem;margin-bottom:0.75rem;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-  .panel-before .slop-card h5{font-family:Inter,sans-serif;font-size:0.875rem;color:#333}
-  .panel-before .slop-card p{font-size:0.75rem;color:#666;margin-top:0.25rem}
-  .panel-before .slop-btn{background:linear-gradient(135deg,#7c3aed,#3b82f6);color:#fff;border:none;padding:0.625rem 1.25rem;border-radius:100px;font-size:0.8125rem;font-family:Inter,sans-serif;margin-top:auto;cursor:pointer;width:fit-content}
-  /* AFTER — taste-skill applied */
-  .panel-after{
-    background:#0a0a0f;color:#f0f0f5;
-    border:2px solid #10b981;
-  }
-  .panel-after .badge{background:#10b981;color:#050508;font-family:'Geist Mono',monospace;font-size:0.6875rem;font-weight:700;padding:0.25rem 0.75rem;border-radius:4px;width:fit-content;margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:0.08em}
-  .panel-after h4{font-family:'Cabinet Grotesk',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.75rem}
-  .panel-after .taste-card-demo{background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem;margin-bottom:0.75rem;box-shadow:inset 0 1px 1px rgba(255,255,255,0.04)}
-  .panel-after .taste-card-demo h5{font-family:'Cabinet Grotesk',sans-serif;font-size:0.875rem;font-weight:700;letter-spacing:-0.01em}
-  .panel-after .taste-card-demo p{font-size:0.75rem;color:#71717a;margin-top:0.25rem;font-family:'Satoshi',sans-serif}
-  .panel-after .taste-btn{background:#f0f0f5;color:#050508;border:none;padding:0.625rem 1.25rem;border-radius:8px;font-size:0.8125rem;font-family:'Satoshi',sans-serif;font-weight:600;margin-top:auto;cursor:pointer;width:fit-content;transition:transform 0.2s cubic-bezier(0.16,1,0.3,1)}
-  .panel-after .taste-btn:hover{transform:translateY(-1px)}
-  .redesign-label{
-    font-family:'Geist Mono',monospace;font-size:0.625rem;
-    text-transform:uppercase;letter-spacing:0.15em;color:#52525b;
-    margin-bottom:0.5rem;
-  }
-  .redesign-title{
-    font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(1.75rem,3vw,2.5rem);
-    font-weight:800;letter-spacing:-0.02em;
-  }
-  .redesign-info .info-card{background:rgba(17,17,24,0.92);border:1px solid rgba(255,255,255,0.06);color:#f0f0f5}
-  .redesign-info .info-source{background:rgba(16,185,129,0.15);color:#10b981}
-  .redesign-info p{color:#a1a1aa}
+/* ═══════════════════════════════════════════════
+   SLIDE 5 — REDESIGN BEFORE/AFTER
+   Slider drag + live comparison
+   ═══════════════════════════════════════════════ */
+.slide-redesign{background:#111118;color:#f0f0f5;padding:5rem 4rem}
+.redesign-title{font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;letter-spacing:-0.03em;margin-bottom:0.5rem}
+.redesign-sub{font-family:'Geist Mono',monospace;font-size:0.625rem;text-transform:uppercase;letter-spacing:0.15em;color:#52525b;margin-bottom:2rem}
+.compare-container{
+  position:relative;max-width:900px;height:420px;border-radius:16px;overflow:hidden;
+  border:1px solid rgba(255,255,255,0.06);z-index:5;
+}
+.compare-before,.compare-after{position:absolute;inset:0;padding:2.5rem;display:flex;flex-direction:column}
+/* BEFORE — generic AI slop */
+.compare-before{background:#f5f5f5;color:#333;font-family:Inter,Arial,sans-serif;z-index:1}
+.compare-before .badge-b{background:#e53e3e;color:#fff;font-size:0.625rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:100px;width:fit-content;margin-bottom:1.5rem;letter-spacing:0.05em;text-transform:uppercase}
+.compare-before h4{font-family:Inter,sans-serif;font-size:1.75rem;font-weight:700;background:linear-gradient(135deg,#7c3aed,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:1rem}
+.compare-before .slop-cards{display:flex;gap:0.75rem}
+.compare-before .slop-card{background:#fff;border:1px solid #ddd;border-radius:12px;padding:1rem;flex:1;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+.compare-before .slop-card h5{font-family:Inter,sans-serif;font-size:0.8125rem;color:#333}
+.compare-before .slop-card p{font-size:0.6875rem;color:#666;margin-top:0.25rem}
+.compare-before .slop-btn{background:linear-gradient(135deg,#7c3aed,#3b82f6);color:#fff;border:none;padding:0.625rem 1.5rem;border-radius:100px;font-size:0.8125rem;margin-top:auto;width:fit-content;cursor:default}
+/* AFTER — taste-skill */
+.compare-after{background:#0a0a0f;color:#f0f0f5;z-index:2;clip-path:inset(0 50% 0 0)}
+.compare-after .badge-a{background:#10b981;color:#050508;font-family:'Geist Mono',monospace;font-size:0.625rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:4px;width:fit-content;margin-bottom:1.5rem;letter-spacing:0.08em;text-transform:uppercase}
+.compare-after h4{font-family:'Cabinet Grotesk',sans-serif;font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:1rem}
+.compare-after .taste-cards-row{display:flex;gap:0.75rem}
+.compare-after .t-card{background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem;flex:1;box-shadow:inset 0 1px 1px rgba(255,255,255,0.04)}
+.compare-after .t-card h5{font-family:'Cabinet Grotesk',sans-serif;font-size:0.8125rem;font-weight:700}
+.compare-after .t-card p{font-size:0.6875rem;color:#71717a;margin-top:0.25rem;font-family:'Satoshi',sans-serif}
+.compare-after .taste-btn{background:#f0f0f5;color:#050508;border:none;padding:0.625rem 1.5rem;border-radius:8px;font-size:0.8125rem;font-family:'Satoshi',sans-serif;font-weight:600;margin-top:auto;width:fit-content;cursor:default}
+/* Slider handle */
+.compare-slider{
+  position:absolute;top:0;bottom:0;left:50%;width:3px;background:#10b981;z-index:10;cursor:ew-resize;
+  transition:left 0.05s;
+}
+.compare-slider::after{
+  content:'⟷';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:40px;height:40px;border-radius:50%;background:#10b981;color:#050508;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+  box-shadow:0 4px 20px rgba(16,185,129,0.4);
+}
+.redesign-info .info-card{background:rgba(17,17,24,0.92);border:1px solid rgba(255,255,255,0.06);color:#f0f0f5}
+.redesign-info .tag{background:rgba(16,185,129,0.15);color:#10b981}
+.redesign-info p{color:#a1a1aa}
 
-  /* ═══════════════════════════════════════════════
-     SLIDE 6 — MRGOONIE UI-UX-PRO-MAX
-     Data-driven, numbers, metrics
-     ═══════════════════════════════════════════════ */
-  .slide-mrgoonie{
-    background:#070714;
-    color:#f0f0f5;
-    padding:4rem;
-  }
-  .mrgoonie-orb{
-    position:absolute;width:400px;height:400px;border-radius:50%;
-    background:radial-gradient(circle,rgba(59,130,246,0.08) 0%,transparent 70%);
-    top:20%;right:10%;filter:blur(80px);
-  }
-  .mrgoonie-title{
-    font-family:'Cabinet Grotesk',sans-serif;
-    font-size:clamp(2rem,5vw,3.5rem);font-weight:900;
-    letter-spacing:-0.03em;line-height:1;
-    position:relative;z-index:2;
-  }
-  .mrgoonie-title .blue{color:#3b82f6}
-  .mrgoonie-stats{
-    display:grid;grid-template-columns:repeat(4,1fr);
-    gap:1rem;margin-top:3rem;position:relative;z-index:2;
-    max-width:900px;
-  }
-  .stat-block{
-    background:rgba(255,255,255,0.03);
-    border:1px solid rgba(255,255,255,0.06);
-    border-radius:16px;padding:1.5rem;
-    text-align:center;
-    transition:border-color 0.3s;
-  }
-  .stat-block:hover{border-color:rgba(59,130,246,0.3)}
-  .stat-block .stat-num{
-    font-family:'Cabinet Grotesk',sans-serif;
-    font-size:2.5rem;font-weight:900;
-    letter-spacing:-0.04em;
-    background:linear-gradient(135deg,#3b82f6,#60a5fa);
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  }
-  .stat-block .stat-label{
-    font-family:'Geist Mono',monospace;font-size:0.5625rem;
-    text-transform:uppercase;letter-spacing:0.1em;color:#52525b;
-    margin-top:0.5rem;
-  }
-  .mrgoonie-skills-row{
-    display:flex;gap:0.75rem;margin-top:2rem;flex-wrap:wrap;
-    position:relative;z-index:2;
-  }
-  .mrgoonie-pill{
-    font-family:'Geist Mono',monospace;font-size:0.625rem;
-    padding:0.5rem 1rem;border-radius:100px;
-    background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.15);
-    color:#60a5fa;text-transform:uppercase;letter-spacing:0.08em;
-    transition:all 0.3s;cursor:default;
-  }
-  .mrgoonie-pill:hover{background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.3)}
-  .mrgoonie-info .info-card{background:rgba(7,7,20,0.9);border:1px solid rgba(59,130,246,0.15);color:#f0f0f5}
-  .mrgoonie-info .info-source{background:rgba(59,130,246,0.15);color:#60a5fa}
-  .mrgoonie-info p{color:#a1a1aa}
+/* ═══════════════════════════════════════════════
+   SLIDE 6 — MRGOONIE
+   Animated counters + floating pills
+   ═══════════════════════════════════════════════ */
+.slide-mrgoonie{background:#070714;color:#f0f0f5;padding:5rem 4rem}
+.mrg-orb{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,0.1) 0%,transparent 70%);top:15%;right:5%;filter:blur(80px)}
+.mrg-title{font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;letter-spacing:-0.04em;line-height:0.95;position:relative;z-index:5}
+.mrg-blue{color:#3b82f6}
+.mrg-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-top:3rem;position:relative;z-index:5;max-width:900px}
+.mrg-stat{
+  background:rgba(255,255,255,0.02);border:1px solid rgba(59,130,246,0.1);
+  border-radius:20px;padding:1.75rem;text-align:center;
+  transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.mrg-stat:hover{border-color:rgba(59,130,246,0.3);transform:translateY(-4px);box-shadow:0 20px 40px rgba(59,130,246,0.08)}
+.mrg-num{font-family:'Cabinet Grotesk',sans-serif;font-size:3rem;font-weight:900;letter-spacing:-0.04em;color:#3b82f6}
+.mrg-label{font-family:'Geist Mono',monospace;font-size:0.5rem;text-transform:uppercase;letter-spacing:0.12em;color:#52525b;margin-top:0.35rem}
+/* Floating marquee pills */
+.mrg-marquee{
+  overflow:hidden;margin-top:2.5rem;position:relative;z-index:5;
+  mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
+}
+.mrg-marquee-inner{display:flex;gap:0.75rem;animation:marquee 20s linear infinite;width:max-content}
+.mrg-pill{
+  font-family:'Geist Mono',monospace;font-size:0.5625rem;padding:0.5rem 1rem;
+  border-radius:100px;border:1px solid rgba(59,130,246,0.12);color:#60a5fa;
+  text-transform:uppercase;letter-spacing:0.06em;white-space:nowrap;
+  background:rgba(59,130,246,0.04);
+}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.mrg-info .info-card{background:rgba(7,7,20,0.9);border:1px solid rgba(59,130,246,0.12);color:#f0f0f5}
+.mrg-info .tag{background:rgba(59,130,246,0.15);color:#60a5fa}
+.mrg-info p{color:#a1a1aa}
+@media(max-width:768px){.mrg-stats{grid-template-columns:1fr 1fr}}
 
-  /* ═══════════════════════════════════════════════
-     SLIDE 7 — FRONTEND-DESIGN (Anthropic)
-     Bold, creative, unexpected
-     ═══════════════════════════════════════════════ */
-  .slide-anthropic{
-    background:#0f0f23;
-    color:#f0f0f5;
-    padding:4rem;
-    overflow:hidden;
-  }
-  .anthropic-bg-text{
-    position:absolute;
-    font-family:'Archivo Black',sans-serif;
-    font-size:clamp(8rem,25vw,20rem);
-    font-weight:900;
-    text-transform:uppercase;
-    color:rgba(255,255,255,0.02);
-    letter-spacing:-0.05em;
-    line-height:0.85;
-    top:50%;left:50%;
-    transform:translate(-50%,-50%);
-    white-space:nowrap;
-    pointer-events:none;
-    z-index:1;
-  }
-  .anthropic-content{
-    position:relative;z-index:10;
-    display:flex;flex-direction:column;gap:2rem;
-  }
-  .anthropic-eyebrow{
-    font-family:'Geist Mono',monospace;font-size:0.625rem;
-    text-transform:uppercase;letter-spacing:0.2em;color:#f59e0b;
-  }
-  .anthropic-title{
-    font-family:'Outfit',sans-serif;
-    font-size:clamp(2.5rem,6vw,4.5rem);
-    font-weight:900;line-height:1;letter-spacing:-0.03em;
-  }
-  .anthropic-title .gradient-text{
-    background:linear-gradient(135deg,#f59e0b,#ef4444,#ec4899);
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  }
-  /* Floating creative cards with rotation */
-  .creative-cards{
-    display:flex;gap:1.25rem;margin-top:1rem;
-    flex-wrap:wrap;
-  }
-  .creative-card{
-    background:rgba(255,255,255,0.04);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:20px;padding:1.75rem;
-    width:220px;
-    transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
-    position:relative;overflow:hidden;
-  }
-  .creative-card::before{
-    content:'';position:absolute;top:0;left:0;right:0;height:3px;
-    border-radius:20px 20px 0 0;
-  }
-  .creative-card:nth-child(1)::before{background:linear-gradient(90deg,#f59e0b,#ef4444)}
-  .creative-card:nth-child(2)::before{background:linear-gradient(90deg,#ec4899,#8b5cf6)}
-  .creative-card:nth-child(3)::before{background:linear-gradient(90deg,#10b981,#3b82f6)}
-  .creative-card:nth-child(4)::before{background:linear-gradient(90deg,#3b82f6,#06b6d4)}
-  .creative-card:hover{transform:translateY(-4px) rotate(0.5deg);border-color:rgba(255,255,255,0.15)}
-  .creative-card h4{font-family:'Outfit',sans-serif;font-weight:800;font-size:1rem;margin-bottom:0.5rem}
-  .creative-card p{font-size:0.75rem;color:#71717a;line-height:1.5;font-family:'Satoshi',sans-serif}
-  .anthropic-info .info-card{background:rgba(15,15,35,0.9);border:1px solid rgba(245,158,11,0.15);color:#f0f0f5}
-  .anthropic-info .info-source{background:rgba(245,158,11,0.15);color:#f59e0b}
-  .anthropic-info p{color:#a1a1aa}
+/* ═══════════════════════════════════════════════
+   SLIDE 7 — FRONTEND-DESIGN (Anthropic)
+   3D tilt cards + gradient text + giant BG text
+   ═══════════════════════════════════════════════ */
+.slide-anthropic{background:#0f0f23;color:#f0f0f5;padding:5rem 4rem;perspective:1000px}
+.anth-bg{
+  position:absolute;font-family:'Archivo Black',sans-serif;font-size:clamp(10rem,30vw,22rem);
+  font-weight:900;text-transform:uppercase;color:rgba(255,255,255,0.015);letter-spacing:-0.05em;
+  top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;z-index:1;
+}
+.anth-content{position:relative;z-index:5}
+.anth-eyebrow{font-family:'Geist Mono',monospace;font-size:0.625rem;text-transform:uppercase;letter-spacing:0.2em;color:#f59e0b;margin-bottom:1rem}
+.anth-title{font-family:'Outfit',sans-serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:900;line-height:0.95;letter-spacing:-0.03em}
+.gradient-text{background:linear-gradient(135deg,#f59e0b,#ef4444,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+/* 3D tilt cards */
+.tilt-row{display:flex;gap:1.25rem;margin-top:2.5rem;flex-wrap:wrap}
+.tilt-card{
+  width:230px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+  border-radius:20px;padding:1.75rem;position:relative;overflow:hidden;
+  transition:transform 0.4s cubic-bezier(0.16,1,0.3,1),box-shadow 0.4s;
+  transform-style:preserve-3d;
+}
+.tilt-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:20px 20px 0 0}
+.tilt-card:nth-child(1)::before{background:linear-gradient(90deg,#f59e0b,#ef4444)}
+.tilt-card:nth-child(2)::before{background:linear-gradient(90deg,#ec4899,#8b5cf6)}
+.tilt-card:nth-child(3)::before{background:linear-gradient(90deg,#10b981,#06b6d4)}
+.tilt-card:nth-child(4)::before{background:linear-gradient(90deg,#3b82f6,#8b5cf6)}
+.tilt-card:hover{transform:perspective(800px) rotateY(-5deg) rotateX(3deg) translateZ(10px);box-shadow:10px 10px 30px rgba(0,0,0,0.3)}
+.tilt-card h4{font-family:'Outfit',sans-serif;font-weight:800;font-size:1rem;margin-bottom:0.4rem}
+.tilt-card p{font-size:0.6875rem;color:#71717a;line-height:1.55;font-family:'Satoshi',sans-serif}
+.anth-info .info-card{background:rgba(15,15,35,0.9);border:1px solid rgba(245,158,11,0.12);color:#f0f0f5}
+.anth-info .tag{background:rgba(245,158,11,0.15);color:#f59e0b}
+.anth-info p{color:#a1a1aa}
 
-  /* ═══════════════════════════════════════════════
-     SLIDE 8 — DESIGN ROUTER (Custom)
-     Show the routing in action
-     ═══════════════════════════════════════════════ */
-  .slide-router{
-    background:#050508;
-    color:#f0f0f5;
-    padding:4rem;
-  }
-  .router-title{
-    font-family:'Cabinet Grotesk',sans-serif;
-    font-size:clamp(2rem,4vw,3rem);font-weight:900;
-    letter-spacing:-0.03em;
-  }
-  .routing-demo-grid{
-    display:grid;grid-template-columns:repeat(3,1fr);
-    gap:1rem;margin-top:2.5rem;max-width:1000px;
-  }
-  .route-card{
-    border-radius:16px;padding:1.75rem;
-    position:relative;overflow:hidden;
-    transition:transform 0.4s cubic-bezier(0.16,1,0.3,1);
-    min-height:180px;display:flex;flex-direction:column;justify-content:flex-end;
-  }
-  .route-card:hover{transform:scale(1.02)}
-  .route-card .route-type{font-family:'Geist Mono',monospace;font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem}
-  .route-card h4{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:1.125rem;letter-spacing:-0.01em;margin-bottom:0.25rem}
-  .route-card .route-skill{font-family:'Geist Mono',monospace;font-size:0.625rem;opacity:0.6}
-  /* Each card visually represents its destination style */
-  .route-saas{background:#0a0a0f;border:1px solid rgba(16,185,129,0.2);color:#f0f0f5}
-  .route-saas .route-type{color:#10b981}
-  .route-luxury{background:#FDFBF7;color:#1a1a1a;border:1px solid rgba(0,0,0,0.06)}
-  .route-luxury h4{font-family:'Playfair Display',serif;font-weight:700;font-style:italic}
-  .route-luxury .route-type{color:#8B7355}
-  .route-luxury .route-skill{color:#8B8680}
-  .route-editorial{background:#FFFFFF;color:#111111;border:1px solid #EAEAEA}
-  .route-editorial .route-type{color:#346538}
-  .route-editorial .route-skill{color:#787774}
-  .route-terminal{background:#0a0a0a;color:#00ff41;border:1px solid rgba(0,255,65,0.2);font-family:'Space Mono',monospace}
-  .route-terminal .route-type{color:#ff0000}
-  .route-creative{background:#0f0f23;color:#f0f0f5;border:1px solid rgba(245,158,11,0.2)}
-  .route-creative .route-type{color:#f59e0b}
-  .route-mobile{background:#070714;color:#f0f0f5;border:1px solid rgba(59,130,246,0.2)}
-  .route-mobile .route-type{color:#3b82f6}
-  .router-info .info-card{background:rgba(5,5,8,0.9);border:1px solid rgba(168,85,247,0.15);color:#f0f0f5}
-  .router-info .info-source{background:rgba(168,85,247,0.15);color:#a855f7}
-  .router-info p{color:#a1a1aa}
+/* ═══════════════════════════════════════════════
+   SLIDE 8 — ROUTER
+   Each card IS the style it routes to
+   ═══════════════════════════════════════════════ */
+.slide-router{background:#050508;color:#f0f0f5;padding:5rem 4rem}
+.router-title{font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;letter-spacing:-0.03em;margin-bottom:2rem;position:relative;z-index:5}
+.route-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:1000px;position:relative;z-index:5}
+.route-card{border-radius:16px;padding:1.75rem;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;transition:all 0.5s cubic-bezier(0.16,1,0.3,1)}
+.route-card:hover{transform:translateY(-6px) scale(1.02)}
+.route-card .rt{font-family:'Geist Mono',monospace;font-size:0.5rem;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:auto}
+.route-card h4{font-size:1.125rem;font-weight:800;letter-spacing:-0.01em;margin-bottom:0.15rem}
+.route-card .rs{font-family:'Geist Mono',monospace;font-size:0.5625rem;opacity:0.5}
+/* Each card styled as its target */
+.rc-saas{background:#0a0a0f;border:1px solid rgba(16,185,129,0.15);color:#f0f0f5;font-family:'Cabinet Grotesk',sans-serif}.rc-saas .rt{color:#10b981}
+.rc-luxury{background:#FDFBF7;border:1px solid rgba(0,0,0,0.06);color:#1a1a1a}.rc-luxury h4{font-family:'Playfair Display',serif;font-weight:700;font-style:italic}.rc-luxury .rt{color:#8B7355}.rc-luxury .rs{color:#8B8680}
+.rc-notion{background:#fff;border:1px solid #EAEAEA;color:#111}.rc-notion h4{font-family:'Satoshi',sans-serif}.rc-notion .rt{color:#346538}.rc-notion .rs{color:#787774}
+.rc-crt{background:#0a0a0a;border:1px solid rgba(0,255,65,0.15);color:#00ff41;font-family:'Space Mono',monospace}.rc-crt .rt{color:#ff0000}
+.rc-bold{background:#0f0f23;border:1px solid rgba(245,158,11,0.15);color:#f0f0f5;font-family:'Outfit',sans-serif}.rc-bold .rt{color:#f59e0b}
+.rc-data{background:#070714;border:1px solid rgba(59,130,246,0.15);color:#f0f0f5;font-family:'Cabinet Grotesk',sans-serif}.rc-data .rt{color:#3b82f6}
+.router-info .info-card{background:rgba(5,5,8,0.9);border:1px solid rgba(168,85,247,0.12);color:#f0f0f5}
+.router-info .tag{background:rgba(168,85,247,0.15);color:#a855f7}
+.router-info p{color:#a1a1aa}
+@media(max-width:768px){.route-grid{grid-template-columns:1fr}}
 
-  /* ═══════════════════════════════════════════════
-     SLIDE 9 — OUTPUT-SKILL + STITCH (Leon)
-     Terminal-like, code display
-     ═══════════════════════════════════════════════ */
-  .slide-output{
-    background:#0c0c14;
-    color:#f0f0f5;
-    padding:4rem;
-    font-family:'Geist Mono',monospace;
-  }
-  .output-title{
-    font-family:'Cabinet Grotesk',sans-serif;
-    font-size:clamp(2rem,4vw,3rem);font-weight:900;
-    letter-spacing:-0.03em;margin-bottom:2rem;
-  }
-  .code-blocks{
-    display:grid;grid-template-columns:1fr 1fr;
-    gap:1.5rem;max-width:1000px;
-  }
-  .code-block{
-    background:#111118;border:1px solid rgba(255,255,255,0.06);
-    border-radius:12px;overflow:hidden;
-  }
-  .code-header{
-    padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);
-    display:flex;align-items:center;gap:0.5rem;
-    font-size:0.625rem;text-transform:uppercase;letter-spacing:0.1em;color:#52525b;
-  }
-  .code-dot{width:8px;height:8px;border-radius:50%}
-  .code-dot.red{background:#ef4444}
-  .code-dot.green{background:#10b981}
-  .code-body{
-    padding:1.25rem;font-size:0.75rem;line-height:1.8;
-    color:#a1a1aa;
-  }
-  .code-body .keyword{color:#c084fc}
-  .code-body .string{color:#10b981}
-  .code-body .comment{color:#52525b;font-style:italic}
-  .code-body .banned{color:#ef4444;text-decoration:line-through;opacity:0.5}
-  .code-body .enforced{color:#10b981}
-  .output-info .info-card{background:rgba(12,12,20,0.92);border:1px solid rgba(192,132,252,0.15);color:#f0f0f5}
-  .output-info .info-source{background:rgba(16,185,129,0.15);color:#10b981}
-  .output-info p{color:#a1a1aa}
-
-  /* ═══════════════════════════════════════════════
-     SLIDE 10 — FINALE
-     ═══════════════════════════════════════════════ */
-  .slide-finale{
-    background:#050508;color:#f0f0f5;
-    font-family:'Cabinet Grotesk',sans-serif;
-    align-items:center;text-align:center;
-    padding:4rem;
-  }
-  .finale-title{
-    font-size:clamp(2.5rem,6vw,5rem);
-    font-weight:900;line-height:0.95;letter-spacing:-0.04em;
-  }
-  .finale-title em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:#10b981}
-  .finale-install{
-    font-family:'Geist Mono',monospace;font-size:0.8125rem;
-    padding:0.75rem 1.5rem;background:#111118;
-    border:1px solid rgba(255,255,255,0.06);
-    border-radius:8px;color:#10b981;margin-top:3rem;
-    display:inline-block;
-  }
-  .finale-credits{
-    margin-top:4rem;font-family:'Geist Mono',monospace;
-    font-size:0.5625rem;text-transform:uppercase;
-    letter-spacing:0.12em;color:#52525b;
-    display:flex;gap:3rem;
-  }
-  .finale-credits a{color:#52525b;text-decoration:none;transition:color 0.2s}
-  .finale-credits a:hover{color:#f0f0f5}
+/* ═══════════════════════════════════════════════
+   SLIDE 9 — FINALE
+   ═══════════════════════════════════════════════ */
+.slide-finale{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:4rem;color:#f0f0f5;background:#050508;
+}
+.finale-title{font-family:'Cabinet Grotesk',sans-serif;font-size:clamp(3rem,8vw,6rem);font-weight:900;line-height:0.95;letter-spacing:-0.04em}
+.finale-title em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:#10b981}
+.finale-cmd{
+  font-family:'Geist Mono',monospace;font-size:0.8125rem;padding:0.75rem 1.5rem;
+  background:#111118;border:1px solid rgba(255,255,255,0.06);border-radius:8px;
+  color:#10b981;margin-top:3rem;display:inline-block;
+  transition:all 0.3s;cursor:pointer;
+}
+.finale-cmd:hover{border-color:rgba(16,185,129,0.3);box-shadow:0 0 30px rgba(16,185,129,0.1)}
+.finale-links{
+  margin-top:4rem;display:flex;gap:3rem;
+  font-family:'Geist Mono',monospace;font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.12em;
+}
+.finale-links a{color:#52525b;text-decoration:none;transition:color 0.3s}
+.finale-links a:hover{color:#f0f0f5}
 </style>
 </head>
 <body>
 
+<!-- PROGRESS BAR -->
+<div class="progress" id="progress"></div>
+
+<!-- SLIDE DOTS -->
+<div class="slide-counter" id="dots"></div>
+
 <!-- ═══ SLIDE 0 — INTRO ═══ -->
-<section class="slide slide-intro">
-  <div class="intro-eyebrow">UIUX High Taste Skill Collection</div>
-  <h1>Scroll to <em>discover</em><br>every skill.</h1>
-  <p class="intro-sub">Each section is styled using the actual skill it presents. You're not reading about design — you're experiencing it.</p>
-  <div class="scroll-down">
-    Scroll down to begin
-    <span class="scroll-arrow"></span>
-  </div>
+<section class="slide slide-intro" data-slide="0">
+  <div class="intro-line"><span>Scroll to</span></div>
+  <div class="intro-line"><span><em>discover</em></span></div>
+  <div class="intro-line"><span>every skill.</span></div>
+  <p class="intro-sub">Each section is built with the actual skill it presents. You're not reading about design — you're inside it.</p>
+  <div class="intro-scroll"></div>
 </section>
 
 <!-- ═══ SLIDE 1 — TASTE-SKILL ═══ -->
-<section class="slide slide-taste taste-info">
-  <div class="taste-orb-1"></div>
-  <div class="taste-orb-2"></div>
-  <h2 class="hero-title-taste">
-    The <span class="taste-accent">anti-slop</span><br>design engine.
-  </h2>
-  <div class="taste-cards">
-    <div class="taste-demo-card">
-      <div class="taste-demo-card-inner">
-        <div class="card-num">Rule 01 — Typography</div>
+<section class="slide slide-taste taste-info" data-slide="1">
+  <div class="taste-orb taste-orb-1"></div>
+  <div class="taste-orb taste-orb-2"></div>
+  <h2 class="taste-title reveal">The <span class="taste-accent">anti-slop</span><br>engine.</h2>
+  <div class="taste-grid">
+    <div class="spotlight-card reveal stagger" style="--i:0">
+      <div class="spotlight-card-inner">
+        <div class="sc-label">01 — Typography</div>
         <h4>Inter is banned.</h4>
-        <p>Force Geist, Satoshi, Cabinet Grotesk, or Outfit. Serif banned in dashboards. Monospace for data.</p>
+        <p>Force Geist, Satoshi, Outfit. Serif banned in dashboards.</p>
       </div>
     </div>
-    <div class="taste-demo-card">
-      <div class="taste-demo-card-inner">
-        <div class="card-num">Rule 02 — Color</div>
-        <h4>Max 1 accent. No purple.</h4>
-        <p>Saturation below 80%. The "AI purple gradient" is the #1 tell. Neutral bases + singular accent.</p>
+    <div class="spotlight-card reveal stagger" style="--i:1">
+      <div class="spotlight-card-inner">
+        <div class="sc-label">02 — Color</div>
+        <h4>Max 1 accent.</h4>
+        <p>No purple AI gradient. Saturation below 80%. Neutral bases.</p>
       </div>
     </div>
-    <div class="taste-demo-card">
-      <div class="taste-demo-card-inner">
-        <div class="card-num">Rule 03 — Layout</div>
-        <h4>No centered heroes.</h4>
-        <p>3-column equal cards = banned. Force split screen, asymmetric grids, bento. CSS Grid over Flexbox math.</p>
+    <div class="spotlight-card reveal stagger" style="--i:2">
+      <div class="spotlight-card-inner">
+        <div class="sc-label">03 — Layout</div>
+        <h4>No centered hero.</h4>
+        <p>3-column equal cards = banned. Bento, split, asymmetric.</p>
       </div>
     </div>
-    <div class="taste-demo-card">
-      <div class="taste-demo-card-inner">
-        <div class="card-num">Rule 04 — Motion</div>
-        <h4>Spring physics only.</h4>
-        <p>Stiffness 100, damping 20. Staggered cascade reveals. Never mount everything at once. GPU-accelerated only.</p>
+    <div class="spotlight-card reveal stagger" style="--i:3">
+      <div class="spotlight-card-inner">
+        <div class="sc-label">04 — Motion</div>
+        <h4>Spring physics.</h4>
+        <p>Stiffness 100, damping 20. Staggered cascade. GPU only.</p>
       </div>
     </div>
   </div>
   <div class="info-card">
-    <span class="info-source">Leonxlnx / taste-skill</span>
+    <span class="tag">Leonxlnx / taste-skill</span>
     <h3>taste-skill</h3>
-    <p>The foundation. 3 configurable dials (Variance 8, Motion 6, Density 4) drive every design rule. This dark page with emerald accent, grain overlay, ambient mesh gradients, and spring-eased cards is taste-skill in action.</p>
-    <div class="scroll-hint">Scroll for next skill ↓</div>
+    <p>The foundation of the collection. 3 dials (Variance, Motion, Density) control every rule. Hover the cards — the border glows where your cursor is (spotlight border technique).</p>
   </div>
 </section>
 
 <!-- ═══ SLIDE 2 — SOFT-SKILL ═══ -->
-<section class="slide slide-soft soft-info">
-  <div class="soft-noise"></div>
-  <h2 class="hero-title-soft">
-    Design like a<br><span class="italic-accent">$150k agency.</span>
-  </h2>
-  <p class="soft-subtitle">Warm creams, editorial serif headlines, double-bezel card architecture, and haptic micro-interactions that make interfaces feel like machined hardware.</p>
-  <div class="soft-bento">
-    <div class="soft-cell span-2">
-      <div class="soft-cell-inner">
-        <div class="cell-label">Technique</div>
-        <div class="cell-value">Double Bezel</div>
-        <div class="cell-desc">Outer shell (padding + border) wraps an inner core (distinct background + inset highlight). Like a glass plate in an aluminum tray.</div>
-      </div>
+<section class="slide slide-soft soft-info" data-slide="2">
+  <div class="noise-overlay"></div>
+  <div class="soft-layout">
+    <div class="soft-left">
+      <h2 class="soft-title reveal-left">Design like a<br><span class="soft-italic">$150k agency.</span></h2>
+      <p class="soft-sub reveal-left" style="--i:1">Warm creams, editorial serif, double-bezel card architecture, haptic depth. Three vibes: Ethereal Glass, Editorial Luxury, Soft Structuralism.</p>
     </div>
-    <div class="soft-cell">
-      <div class="soft-cell-inner">
-        <div class="cell-label">Vibes</div>
-        <div class="cell-value">3</div>
-        <div class="cell-desc">Ethereal Glass, Editorial Luxury, Soft Structuralism</div>
-      </div>
-    </div>
-    <div class="soft-cell">
-      <div class="soft-cell-inner">
-        <div class="cell-label">Motion</div>
-        <div class="cell-value">Spring</div>
-        <div class="cell-desc">stiffness: 100, damping: 20 — weighty, cinematic</div>
-      </div>
-    </div>
-    <div class="soft-cell">
-      <div class="soft-cell-inner">
-        <div class="cell-label">Archetype</div>
-        <div class="cell-value" style="font-style:italic">Luxury</div>
-        <div class="cell-desc">This slide uses the Editorial Luxury vibe — warm tones, serif headlines, film grain</div>
+    <div class="soft-right">
+      <div class="soft-bento">
+        <div class="soft-cell tall reveal-right stagger" style="--i:0">
+          <div class="soft-cell-inner">
+            <div class="label">Architecture</div>
+            <div class="value">Double Bezel</div>
+            <div class="desc">Outer shell wraps inner core. Like glass in aluminum. Each cell on this grid uses it.</div>
+          </div>
+        </div>
+        <div class="soft-cell reveal-right stagger" style="--i:1">
+          <div class="soft-cell-inner">
+            <div class="label">Vibes</div>
+            <div class="value">3</div>
+          </div>
+        </div>
+        <div class="soft-cell reveal-right stagger" style="--i:2">
+          <div class="soft-cell-inner">
+            <div class="label">Motion</div>
+            <div class="value" style="font-style:italic">Spring</div>
+          </div>
+        </div>
+        <div class="soft-cell reveal-right stagger" style="--i:3">
+          <div class="soft-cell-inner">
+            <div class="label">Texture</div>
+            <div class="value">Grain</div>
+            <div class="desc">Film noise at 3% opacity. See the subtle texture on this background.</div>
+          </div>
+        </div>
+        <div class="soft-cell reveal-right stagger" style="--i:4">
+          <div class="soft-cell-inner">
+            <div class="label">Palette</div>
+            <div class="value">#FDFBF7</div>
+            <div class="desc">Warm bone, not clinical white.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   <div class="info-card">
-    <span class="info-source">Leonxlnx / soft-skill</span>
+    <span class="tag">Leonxlnx / soft-skill</span>
     <h3>soft-skill</h3>
-    <p>Agency-level aesthetics. This warm cream page with Playfair Display serif, noise texture overlay, and asymmetric bento grid with nested double-bezel cells is the soft-skill "Editorial Luxury" archetype.</p>
-    <div class="scroll-hint">Scroll for next skill ↓</div>
+    <p>This warm cream page with Playfair Display, noise overlay, and floating bento cells that lift on hover is the "Editorial Luxury" vibe. The double-bezel is visible: outer padding + inner surface.</p>
   </div>
 </section>
 
-<!-- ═══ SLIDE 3 — MINIMALIST-SKILL ═══ -->
-<section class="slide slide-minimal minimal-info">
-  <h2 class="minimal-header">Clean, editorial,<br>content-first.</h2>
-  <p class="minimal-sub">The Notion / Linear aesthetic. Warm monochrome, desaturated pastel accents, 1px structural borders, zero gradients. Typography does all the work.</p>
-  <div class="bento-grid">
-    <div class="bento-cell">
-      <div class="bento-icon pastel-blue">T</div>
+<!-- ═══ SLIDE 3 — MINIMALIST ═══ -->
+<section class="slide slide-minimal minimal-info" data-slide="3">
+  <h2 class="minimal-title reveal">Clean, editorial,<br>content-first.</h2>
+  <div class="typewriter">$ applying minimalist-skill protocol...</div>
+  <div class="notion-grid">
+    <div class="notion-cell reveal stagger" style="--i:0">
+      <div class="icon nc-blue">Aa</div>
       <h4>Typography</h4>
-      <p>Geist Sans body, Lyon Text serif headlines. Off-black #111 text, never pure #000.</p>
+      <p>Geist Sans body. Lyon Text serif headlines. Off-black #111, never pure #000.</p>
     </div>
-    <div class="bento-cell">
-      <div class="bento-icon pastel-green">C</div>
+    <div class="notion-cell reveal stagger" style="--i:1">
+      <div class="icon nc-green">C</div>
       <h4>Colors</h4>
-      <p>Canvas #F7F6F3. Borders #EAEAEA. Desaturated pastels only for accent tags.</p>
+      <p>Canvas #F7F6F3. Borders #EAEAEA. Desaturated pastels for tags only.</p>
     </div>
-    <div class="bento-cell">
-      <div class="bento-icon pastel-yellow">L</div>
-      <h4>Layout</h4>
-      <p>Asymmetric bento grids. 1px borders, 8-12px radius. Zero heavy shadows.</p>
+    <div class="notion-cell reveal stagger" style="--i:2">
+      <div class="icon nc-yellow">G</div>
+      <h4>Grid</h4>
+      <p>Asymmetric bento. 1px borders, 8-12px radius. Zero heavy shadows.</p>
     </div>
-    <div class="bento-cell">
-      <div class="bento-icon pastel-red">B</div>
+    <div class="notion-cell reveal stagger" style="--i:3">
+      <div class="icon nc-red">B</div>
       <h4>Buttons</h4>
-      <p>Solid #111 background. 4-6px radius. No pill shapes. No gradients. No box-shadow.</p>
+      <p>Solid #111. 4-6px radius. No pills, no gradients, no box-shadow.</p>
     </div>
-    <div class="bento-cell">
-      <div class="bento-icon pastel-purple">A</div>
-      <h4>Animation</h4>
-      <p>Invisible — present but never distracting. Fade-in, subtle hover shifts. That's it.</p>
+    <div class="notion-cell reveal stagger" style="--i:4">
+      <div class="icon nc-purple">M</div>
+      <h4>Motion</h4>
+      <p>Invisible. Hover the cells — the bottom bar slides in. That's the max.</p>
     </div>
-    <div class="bento-cell">
-      <div class="bento-icon pastel-orange">S</div>
-      <h4>Spacing</h4>
-      <p>Macro-whitespace between sections. 24-40px internal padding. Let it breathe.</p>
+    <div class="notion-cell reveal stagger" style="--i:5">
+      <div class="icon nc-orange">W</div>
+      <h4>Whitespace</h4>
+      <p>Macro-whitespace between sections. 24-40px padding. Let it breathe.</p>
     </div>
   </div>
   <div class="info-card">
-    <span class="info-source">Leonxlnx / minimalist-skill</span>
+    <span class="tag">Leonxlnx / minimalist-skill</span>
     <h3>minimalist-skill</h3>
-    <p>This white page with warm borders, pastel icon backgrounds, clean bento grid, and Satoshi font is the minimalist-skill protocol. Every element follows the "ultra-flat, document-style" directive.</p>
-    <div class="scroll-hint">Scroll for next skill ↓</div>
+    <p>The Notion/Linear aesthetic. Hover cells to see the bottom-bar animation. The typewriter types on scroll entry. Warm white, structured borders, editorial calm.</p>
   </div>
 </section>
 
-<!-- ═══ SLIDE 4 — BRUTALIST-SKILL ═══ -->
-<section class="slide slide-brutalist brutalist-info">
-  <div class="scanlines"></div>
-  <div class="brutalist-title">DATA<br><span class="red">//</span>RAW</div>
-  <div class="brutalist-meta">
-    SYS.INTERFACE > TACTICAL_TELEMETRY > STATUS:ACTIVE<span class="cursor-blink"></span>
+<!-- ═══ SLIDE 4 — BRUTALIST ═══ -->
+<section class="slide slide-brutalist brutalist-info" data-slide="4">
+  <div class="brutalist-scanlines"></div>
+  <div class="brutalist-title reveal-scale">
+    <span class="glitch" data-text="DATA">DATA</span><br>
+    <span style="color:#ff0000">//</span>RAW
   </div>
-  <div class="swiss-grid">
-    <div class="swiss-cell">
-      <div class="cell-id">SYS.FONT</div>
-      <div class="cell-val">MONO</div>
-      <div class="cell-unit">Space Mono / JetBrains</div>
-    </div>
-    <div class="swiss-cell">
-      <div class="cell-id">SYS.MODE</div>
-      <div class="cell-val">CRT</div>
-      <div class="cell-unit">Phosphor glow active</div>
-    </div>
-    <div class="swiss-cell">
-      <div class="cell-id">SYS.COLOR</div>
-      <div class="cell-val">#00FF41</div>
-      <div class="cell-unit">Terminal green only</div>
-    </div>
-    <div class="swiss-cell">
-      <div class="cell-id">SYS.SHADOW</div>
-      <div class="cell-val">NONE</div>
-      <div class="cell-unit">Gradients prohibited</div>
-    </div>
-    <div class="swiss-cell">
-      <div class="cell-id">SYS.SCALE</div>
-      <div class="cell-val">10REM</div>
-      <div class="cell-unit">Extreme type contrast</div>
-    </div>
-    <div class="swiss-cell">
-      <div class="cell-id">SYS.GRID</div>
-      <div class="cell-val">RIGID</div>
-      <div class="cell-unit">Swiss modular grid</div>
-    </div>
-    <div class="swiss-cell">
-      <div class="cell-id">SYS.FX</div>
-      <div class="cell-val">SCAN</div>
-      <div class="cell-unit">CRT scanlines active</div>
-    </div>
-    <div class="swiss-cell">
-      <div class="cell-id">SYS.CASE</div>
-      <div class="cell-val">UPPER</div>
-      <div class="cell-unit">All metadata uppercase</div>
-    </div>
+  <div class="crt-meta reveal" style="--i:1">SYS.INTERFACE &gt; TACTICAL_TELEMETRY &gt; STATUS:ACTIVE<span class="crt-cursor"></span></div>
+  <div class="crt-grid">
+    <div class="crt-cell reveal stagger" style="--i:0"><div class="id">SYS.FONT</div><div class="counter" data-target="4">0</div><div class="unit">Monospace variants</div></div>
+    <div class="crt-cell reveal stagger" style="--i:1"><div class="id">SYS.MODES</div><div class="counter" data-target="2">0</div><div class="unit">Swiss / CRT</div></div>
+    <div class="crt-cell reveal stagger" style="--i:2"><div class="id">SYS.SCANLINES</div><div class="counter" data-target="720">0</div><div class="unit">Lines rendered</div></div>
+    <div class="crt-cell reveal stagger" style="--i:3"><div class="id">SYS.GRADIENTS</div><div class="counter" data-target="0">0</div><div class="unit">Strictly prohibited</div></div>
+    <div class="crt-cell reveal stagger" style="--i:4"><div class="id">SYS.CONTRAST</div><div class="counter" data-target="95">0</div><div class="unit">% type scale range</div></div>
+    <div class="crt-cell reveal stagger" style="--i:5"><div class="id">SYS.COLORS</div><div class="counter" data-target="3">0</div><div class="unit">BG / FG / Red only</div></div>
+    <div class="crt-cell reveal stagger" style="--i:6"><div class="id">SYS.CASE</div><div class="counter" data-target="100">0</div><div class="unit">% Uppercase meta</div></div>
+    <div class="crt-cell reveal stagger" style="--i:7"><div class="id">SYS.GLOW</div><div class="counter" data-target="4">0</div><div class="unit">% Phosphor opacity</div></div>
   </div>
   <div class="info-card">
-    <span class="info-source">Leonxlnx / brutalist-skill</span>
+    <span class="tag">Leonxlnx / brutalist-skill</span>
     <h3>brutalist-skill</h3>
-    <p>CRT Terminal mode. Scanline overlay, phosphor green glow, monospace font, massive Archivo Black headlines, rigid Swiss grid with visible borders. For data dashboards and dev tools. No gradients, no soft shadows — raw functionality.</p>
-    <div class="scroll-hint">Scroll for next skill ↓</div>
+    <p>CRT Terminal mode. Scanlines, phosphor glow, glitch effect on the title, counters that animate on scroll entry. For data dashboards and dev tools. Zero softness.</p>
   </div>
 </section>
 
-<!-- ═══ SLIDE 5 — REDESIGN-SKILL ═══ -->
-<section class="slide slide-redesign redesign-info">
-  <div class="redesign-label">Before / After — Live comparison</div>
-  <h2 class="redesign-title">What redesign-skill<br>actually fixes.</h2>
-  <div class="split-layout">
-    <div class="split-panel panel-before">
-      <div class="badge">Before — AI Slop</div>
+<!-- ═══ SLIDE 5 — REDESIGN ═══ -->
+<section class="slide slide-redesign redesign-info" data-slide="5">
+  <div class="redesign-title reveal">Drag to compare.</div>
+  <div class="redesign-sub reveal">Before (AI slop) vs After (taste-skill applied)</div>
+  <div class="compare-container reveal-scale" id="compare">
+    <div class="compare-before">
+      <div class="badge-b">Before — Generic AI</div>
       <h4>Elevate Your Workflow</h4>
-      <div class="slop-card">
-        <h5>Seamless Integration</h5>
-        <p>Next-gen platform for your team</p>
+      <div class="slop-cards">
+        <div class="slop-card"><h5>Seamless Integration</h5><p>Next-gen platform for your team</p></div>
+        <div class="slop-card"><h5>Unleash Productivity</h5><p>Game-changing features at scale</p></div>
+        <div class="slop-card"><h5>Revolutionize Data</h5><p>Delve into AI-powered insights</p></div>
       </div>
-      <div class="slop-card">
-        <h5>Unleash Productivity</h5>
-        <p>Game-changing features at scale</p>
-      </div>
-      <button class="slop-btn">Get Started Free</button>
+      <button class="slop-btn">Get Started Free ✨</button>
     </div>
-    <div class="split-panel panel-after">
-      <div class="badge">After — Taste Applied</div>
+    <div class="compare-after" id="compareAfter">
+      <div class="badge-a">After — Taste Applied</div>
       <h4>Ship faster, together.</h4>
-      <div class="taste-card-demo">
-        <h5>Real-time editing</h5>
-        <p>Collaborative workspace with conflict resolution</p>
-      </div>
-      <div class="taste-card-demo">
-        <h5>Deploy in 47 seconds</h5>
-        <p>Zero-config CI/CD from any branch</p>
+      <div class="taste-cards-row">
+        <div class="t-card"><h5>Real-time editing</h5><p>Collaborative workspace with conflict resolution</p></div>
+        <div class="t-card"><h5>Deploy in 47 seconds</h5><p>Zero-config CI/CD from any branch</p></div>
+        <div class="t-card"><h5>3 environments</h5><p>Preview, staging, production — automatic</p></div>
       </div>
       <button class="taste-btn">Start building</button>
     </div>
+    <div class="compare-slider" id="slider"></div>
   </div>
   <div class="info-card">
-    <span class="info-source">Leonxlnx / redesign-skill</span>
+    <span class="tag">Leonxlnx / redesign-skill</span>
     <h3>redesign-skill</h3>
-    <p>80+ specific problems to audit: Inter font, purple gradients, "Elevate" copy, pill buttons, generic shadows, fake round numbers. Left panel = what AI produces by default. Right = after taste-skill rules apply. The audit checklist catches every generic pattern.</p>
-    <div class="scroll-hint">Scroll for next skill ↓</div>
+    <p>Drag the green handle. Left = what AI produces by default (Inter, purple gradient, "Elevate" copy, pill button, emoji). Right = after the 80+ audit rules apply.</p>
   </div>
 </section>
 
-<!-- ═══ SLIDE 6 — MRGOONIE UI-UX-PRO-MAX ═══ -->
-<section class="slide slide-mrgoonie mrgoonie-info">
-  <div class="mrgoonie-orb"></div>
-  <h2 class="mrgoonie-title">
-    The <span class="blue">intelligence</span><br>database.
-  </h2>
-  <div class="mrgoonie-stats">
-    <div class="stat-block">
-      <div class="stat-num">161</div>
-      <div class="stat-label">Color Palettes</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-num">57</div>
-      <div class="stat-label">Font Pairings</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-num">99</div>
-      <div class="stat-label">UX Guidelines</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-num">50+</div>
-      <div class="stat-label">Design Styles</div>
-    </div>
+<!-- ═══ SLIDE 6 — MRGOONIE ═══ -->
+<section class="slide slide-mrgoonie mrg-info" data-slide="6">
+  <div class="mrg-orb"></div>
+  <h2 class="mrg-title reveal">The <span class="mrg-blue">intelligence</span><br>database.</h2>
+  <div class="mrg-stats">
+    <div class="mrg-stat reveal stagger" style="--i:0"><div class="mrg-num" data-count="161">0</div><div class="mrg-label">Color Palettes</div></div>
+    <div class="mrg-stat reveal stagger" style="--i:1"><div class="mrg-num" data-count="57">0</div><div class="mrg-label">Font Pairings</div></div>
+    <div class="mrg-stat reveal stagger" style="--i:2"><div class="mrg-num" data-count="99">0</div><div class="mrg-label">UX Guidelines</div></div>
+    <div class="mrg-stat reveal stagger" style="--i:3"><div class="mrg-num" data-count="50">0</div><div class="mrg-label">Design Styles</div></div>
   </div>
-  <div class="mrgoonie-skills-row">
-    <span class="mrgoonie-pill">ui-ux-pro-max</span>
-    <span class="mrgoonie-pill">design-system</span>
-    <span class="mrgoonie-pill">brand</span>
-    <span class="mrgoonie-pill">ui-styling</span>
-    <span class="mrgoonie-pill">slides</span>
-    <span class="mrgoonie-pill">banner-design</span>
-    <span class="mrgoonie-pill">design</span>
+  <div class="mrg-marquee reveal" style="--i:5">
+    <div class="mrg-marquee-inner">
+      <span class="mrg-pill">ui-ux-pro-max</span><span class="mrg-pill">design-system</span><span class="mrg-pill">brand identity</span><span class="mrg-pill">ui-styling</span><span class="mrg-pill">slides</span><span class="mrg-pill">banner-design</span><span class="mrg-pill">shadcn/ui</span><span class="mrg-pill">tailwind</span><span class="mrg-pill">react native</span><span class="mrg-pill">flutter</span><span class="mrg-pill">swiftui</span><span class="mrg-pill">vue</span><span class="mrg-pill">svelte</span><span class="mrg-pill">next.js</span>
+      <span class="mrg-pill">ui-ux-pro-max</span><span class="mrg-pill">design-system</span><span class="mrg-pill">brand identity</span><span class="mrg-pill">ui-styling</span><span class="mrg-pill">slides</span><span class="mrg-pill">banner-design</span><span class="mrg-pill">shadcn/ui</span><span class="mrg-pill">tailwind</span><span class="mrg-pill">react native</span><span class="mrg-pill">flutter</span><span class="mrg-pill">swiftui</span><span class="mrg-pill">vue</span><span class="mrg-pill">svelte</span><span class="mrg-pill">next.js</span>
+    </div>
   </div>
   <div class="info-card">
-    <span class="info-source">mrgoonie / nextlevelbuilder</span>
+    <span class="tag">mrgoonie / nextlevelbuilder</span>
     <h3>ui-ux-pro-max + 6 sub-skills</h3>
-    <p>A searchable design database: 161 color palettes, 57 font pairings, 99 UX rules, 25 chart types across 10 tech stacks. Priority-based rules from accessibility (#1) to charts (#10). Plus brand identity, design tokens, slides, and banner generation.</p>
-    <div class="scroll-hint">Scroll for next skill ↓</div>
+    <p>Numbers count up on scroll entry. The infinite marquee shows all 7 skills and 10 supported tech stacks. A searchable database of design decisions, not just rules.</p>
   </div>
 </section>
 
-<!-- ═══ SLIDE 7 — FRONTEND-DESIGN (Anthropic) ═══ -->
-<section class="slide slide-anthropic anthropic-info">
-  <div class="anthropic-bg-text">BOLD</div>
-  <div class="anthropic-content">
-    <div class="anthropic-eyebrow">Anthropic Official — 277K+ Installs</div>
-    <h2 class="anthropic-title">
-      Make it<br><span class="gradient-text">unforgettable.</span>
-    </h2>
-    <div class="creative-cards">
-      <div class="creative-card">
-        <h4>Brutally Minimal</h4>
-        <p>Restraint as design choice. Fewer elements, more intention. Every pixel earns its place.</p>
-      </div>
-      <div class="creative-card">
-        <h4>Retro-Futuristic</h4>
-        <p>CRT nostalgia meets modern performance. Amber terminals, scanlines, phosphor text.</p>
-      </div>
-      <div class="creative-card">
-        <h4>Organic Natural</h4>
-        <p>Earth tones, botanical textures, hand-drawn elements. Technology that feels alive.</p>
-      </div>
-      <div class="creative-card">
-        <h4>Maximalist Chaos</h4>
-        <p>Layer everything. Overlap, rotate, animate. Controlled disorder that demands attention.</p>
-      </div>
+<!-- ═══ SLIDE 7 — ANTHROPIC ═══ -->
+<section class="slide slide-anthropic anth-info" data-slide="7">
+  <div class="anth-bg">BOLD</div>
+  <div class="anth-content">
+    <div class="anth-eyebrow reveal">Anthropic Official — 277K+ Installs</div>
+    <h2 class="anth-title reveal" style="--i:1">Make it<br><span class="gradient-text">unforgettable.</span></h2>
+    <div class="tilt-row">
+      <div class="tilt-card reveal-rotate stagger" style="--i:0"><h4>Brutally Minimal</h4><p>Restraint as design. Every pixel earns its place. Nothing decorative.</p></div>
+      <div class="tilt-card reveal-rotate stagger" style="--i:1"><h4>Retro-Futuristic</h4><p>CRT nostalgia + modern perf. Amber screens, phosphor glow, scanlines.</p></div>
+      <div class="tilt-card reveal-rotate stagger" style="--i:2"><h4>Organic Natural</h4><p>Earth tones, botanical textures, technology that breathes.</p></div>
+      <div class="tilt-card reveal-rotate stagger" style="--i:3"><h4>Maximalist Chaos</h4><p>Overlap, rotate, animate. Controlled disorder demanding attention.</p></div>
     </div>
   </div>
   <div class="info-card">
-    <span class="info-source">Anthropic / Official Skill</span>
+    <span class="tag">Anthropic / Official</span>
     <h3>frontend-design</h3>
-    <p>Anthropic's most installed skill. Fights "distributional convergence" — AI always producing the same generic look. Forces a BOLD aesthetic direction before any code. "No design should be the same." The gradient-topped cards with rotation on hover demonstrate unexpected choices.</p>
-    <div class="scroll-hint">Scroll for next skill ↓</div>
+    <p>The most installed Claude skill. Fights AI convergence — same generic look every time. Hover the cards for 3D tilt. The giant "BOLD" background text, gradient title, and rotated card entry are all frontend-design philosophy.</p>
   </div>
 </section>
 
-<!-- ═══ SLIDE 8 — DESIGN ROUTER ═══ -->
-<section class="slide slide-router router-info">
-  <h2 class="router-title">You describe.<br>It routes.</h2>
-  <div class="routing-demo-grid">
-    <div class="route-card route-saas">
-      <div class="route-type">SaaS / Dashboard</div>
-      <h4>taste-skill</h4>
-      <div class="route-skill">→ Ethereal Glass vibe</div>
-    </div>
-    <div class="route-card route-luxury">
-      <div class="route-type">Portfolio / Agency</div>
-      <h4>soft-skill</h4>
-      <div class="route-skill">→ Editorial Luxury vibe</div>
-    </div>
-    <div class="route-card route-editorial">
-      <div class="route-type">Blog / Editorial</div>
-      <h4>minimalist-skill</h4>
-      <div class="route-skill">→ Notion / Linear feel</div>
-    </div>
-    <div class="route-card route-terminal">
-      <div class="route-type">DATA_DASHBOARD</div>
-      <h4>BRUTALIST</h4>
-      <div class="route-skill">→ CRT_TERMINAL_MODE</div>
-    </div>
-    <div class="route-card route-creative">
-      <div class="route-type">Creative / Art</div>
-      <h4>frontend-design</h4>
-      <div class="route-skill">→ Maximum creative freedom</div>
-    </div>
-    <div class="route-card route-mobile">
-      <div class="route-type">Mobile App / E-Commerce</div>
-      <h4>ui-ux-pro-max</h4>
-      <div class="route-skill">→ 10 stacks, 99 UX rules</div>
-    </div>
+<!-- ═══ SLIDE 8 — ROUTER ═══ -->
+<section class="slide slide-router router-info" data-slide="8">
+  <h2 class="router-title reveal">You describe. <span style="color:#a855f7">It routes.</span></h2>
+  <div class="route-grid">
+    <div class="route-card rc-saas reveal stagger" style="--i:0"><div class="rt">SaaS / Dashboard</div><h4>taste-skill</h4><div class="rs">Ethereal Glass</div></div>
+    <div class="route-card rc-luxury reveal stagger" style="--i:1"><div class="rt">Portfolio / Agency</div><h4>soft-skill</h4><div class="rs">Editorial Luxury</div></div>
+    <div class="route-card rc-notion reveal stagger" style="--i:2"><div class="rt">Blog / Editorial</div><h4>minimalist-skill</h4><div class="rs">Notion / Linear</div></div>
+    <div class="route-card rc-crt reveal stagger" style="--i:3"><div class="rt">DATA_DASHBOARD</div><h4>BRUTALIST</h4><div class="rs">CRT_TERMINAL</div></div>
+    <div class="route-card rc-bold reveal stagger" style="--i:4"><div class="rt">Creative / Art</div><h4>frontend-design</h4><div class="rs">Maximum freedom</div></div>
+    <div class="route-card rc-data reveal stagger" style="--i:5"><div class="rt">Mobile / E-Commerce</div><h4>ui-ux-pro-max</h4><div class="rs">99 UX rules</div></div>
   </div>
   <div class="info-card">
-    <span class="info-source">Custom / Payos</span>
+    <span class="tag">Custom / Payos</span>
     <h3>design-router</h3>
-    <p>The dispatcher. Each card above IS styled in the target skill's aesthetic. When you ask for a site, the router matches your project type + industry to the right skill combination. taste-skill always loads as baseline protection.</p>
-    <div class="scroll-hint">Scroll for next skill ↓</div>
+    <p>The dispatcher. Each card IS visually styled as its target skill. SaaS = dark+emerald, Luxury = cream+serif, Editorial = white+borders, Dashboard = CRT green, Creative = gradient, Mobile = blue data.</p>
   </div>
 </section>
 
-<!-- ═══ SLIDE 9 — OUTPUT-SKILL + STITCH ═══ -->
-<section class="slide slide-output output-info">
-  <h2 class="output-title">Zero lazy output.<br>Zero truncation.</h2>
-  <div class="code-blocks">
-    <div class="code-block">
-      <div class="code-header">
-        <span class="code-dot red"></span>
-        <span class="code-dot red"></span>
-        output-skill — Banned Patterns
-      </div>
-      <div class="code-body">
-        <span class="banned">// TODO: implement later</span><br>
-        <span class="banned">/* ... rest of code ... */</span><br>
-        <span class="banned">// See above for similar</span><br>
-        <span class="banned">{/* Add remaining items */}</span><br>
-        <span class="banned">// Placeholder content</span><br>
-        <span class="banned">Lorem ipsum dolor sit</span><br>
-        <br>
-        <span class="comment">// All of these = instant fail.</span><br>
-        <span class="comment">// Every line must be real,</span><br>
-        <span class="comment">// production-ready code.</span>
-      </div>
-    </div>
-    <div class="code-block">
-      <div class="code-header">
-        <span class="code-dot green"></span>
-        <span class="code-dot green"></span>
-        stitch-skill — DESIGN.md Output
-      </div>
-      <div class="code-body">
-        <span class="keyword"># Design System:</span> Project<br>
-        <br>
-        <span class="keyword">## 1. Atmosphere</span><br>
-        <span class="string">Variance: 8, Motion: 6</span><br>
-        <br>
-        <span class="keyword">## 2. Color Palette</span><br>
-        <span class="string">Canvas White (#F9FAFB)</span><br>
-        <span class="string">Charcoal Ink (#18181B)</span><br>
-        <br>
-        <span class="keyword">## 3. Anti-Patterns</span><br>
-        <span class="enforced">No Inter, No #000, No neon</span><br>
-        <br>
-        <span class="comment">→ For Google Stitch AI</span>
-      </div>
-    </div>
-  </div>
-  <div class="info-card">
-    <span class="info-source">Leonxlnx / output-skill + stitch-skill</span>
-    <h3>output-skill + stitch-skill</h3>
-    <p>output-skill bans all lazy patterns (TODO, ellipsis, lorem ipsum). If token-limited, uses [PAUSED] breakpoints instead of compression. stitch-skill generates structured DESIGN.md files that Google Stitch AI can interpret to produce premium screens.</p>
-    <div class="scroll-hint">Scroll for finale ↓</div>
-  </div>
-</section>
-
-<!-- ═══ SLIDE 10 — FINALE ═══ -->
-<section class="slide slide-finale">
-  <h2 class="finale-title">22 skills.<br>One <em>install</em>.</h2>
-  <div class="finale-install">npx skills add https://github.com/Payoss/UIUX-high-taste-skill</div>
-  <div class="finale-credits">
+<!-- ═══ SLIDE 9 — FINALE ═══ -->
+<section class="slide slide-finale" data-slide="9">
+  <h2 class="finale-title reveal">22 skills.<br>One <em>install</em>.</h2>
+  <div class="finale-cmd reveal" style="--i:1">npx skills add https://github.com/Payoss/UIUX-high-taste-skill</div>
+  <div class="finale-links reveal" style="--i:2">
     <a href="https://github.com/Leonxlnx/taste-skill" target="_blank">Leonxlnx</a>
     <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank">mrgoonie</a>
     <a href="https://github.com/anthropics/skills" target="_blank">Anthropic</a>
@@ -1113,5 +719,105 @@
   </div>
 </section>
 
+<script>
+// ═══ INTERSECTION OBSERVER — Scroll-triggered reveals ═══
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible', 'in-view');
+      // Counter animations
+      e.target.querySelectorAll('.counter').forEach(c => animateCounter(c));
+      e.target.querySelectorAll('[data-count]').forEach(c => animateCounter(c));
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-rotate, .slide').forEach(el => observer.observe(el));
+
+// ═══ COUNTER ANIMATION ═══
+function animateCounter(el) {
+  if (el.dataset.animated) return;
+  el.dataset.animated = '1';
+  const target = parseInt(el.dataset.target || el.dataset.count);
+  const duration = 1500;
+  const start = performance.now();
+  function update(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(eased * target);
+    if (p < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// ═══ SPOTLIGHT BORDER — cursor-following glow ═══
+document.querySelectorAll('.spotlight-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--x', (e.clientX - r.left) + 'px');
+    card.style.setProperty('--y', (e.clientY - r.top) + 'px');
+  });
+});
+
+// ═══ BEFORE/AFTER SLIDER ═══
+const compare = document.getElementById('compare');
+const slider = document.getElementById('slider');
+const after = document.getElementById('compareAfter');
+let dragging = false;
+
+if (slider && compare) {
+  slider.addEventListener('mousedown', () => dragging = true);
+  slider.addEventListener('touchstart', () => dragging = true);
+  window.addEventListener('mouseup', () => dragging = false);
+  window.addEventListener('touchend', () => dragging = false);
+
+  function moveSlider(x) {
+    const r = compare.getBoundingClientRect();
+    let pct = ((x - r.left) / r.width) * 100;
+    pct = Math.max(5, Math.min(95, pct));
+    slider.style.left = pct + '%';
+    after.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+  }
+
+  compare.addEventListener('mousemove', e => { if (dragging) moveSlider(e.clientX); });
+  compare.addEventListener('touchmove', e => { if (dragging) moveSlider(e.touches[0].clientX); });
+  compare.addEventListener('click', e => moveSlider(e.clientX));
+}
+
+// ═══ PROGRESS BAR ═══
+const prog = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (window.scrollY / h * 100) + '%';
+});
+
+// ═══ SLIDE DOTS ═══
+const slides = document.querySelectorAll('.slide');
+const dotsContainer = document.getElementById('dots');
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot';
+  d.addEventListener('click', () => slides[i].scrollIntoView({ behavior: 'smooth' }));
+  dotsContainer.appendChild(d);
+});
+
+const dotObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const i = parseInt(e.target.dataset.slide);
+      dotsContainer.querySelectorAll('.dot').forEach((d, j) => d.classList.toggle('active', j === i));
+    }
+  });
+}, { threshold: 0.5 });
+
+slides.forEach(s => dotObserver.observe(s));
+
+// ═══ PARALLAX ORBS ═══
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  document.querySelectorAll('.taste-orb-1').forEach(o => o.style.transform = `translateY(${y * 0.08}px)`);
+  document.querySelectorAll('.taste-orb-2').forEach(o => o.style.transform = `translateY(${-y * 0.05}px)`);
+});
+</script>
 </body>
 </html>
